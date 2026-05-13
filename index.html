@@ -6,7 +6,7 @@
   <title>Agni Boards — The Oldest Recovery Tool on Earth</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&family=Barlow:wght@400&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&family=Barlow:wght@400&family=Barlow+Condensed:wght@700;900&family=Teko:wght@700&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
@@ -139,72 +139,54 @@
     .btn-ghost:hover { border-color: var(--white); }
     .btn-group { display: flex; gap: 1rem; flex-wrap: wrap; }
 
+    /* ─── ANNOUNCEMENT BAR ───────────────────── */
+    #announcement {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 101;
+      height: 44px;
+      background: #C9A882;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #3D1F08;
+    }
+    #announcement strong { font-weight: 700; }
+
     /* ─── NAVBAR ─────────────────────────────── */
     #navbar {
       position: fixed;
-      top: 0; left: 0; right: 0;
+      top: 44px; left: 0; right: 0;
       z-index: 100;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 0.5rem 4vw;
-      background: #ffffff;
-      border-bottom: 1px solid rgba(92,42,16,.1);
-      transition: padding 0.3s ease;
-    }
-    #navbar .logo img {
-      height: 70px;
-      width: auto;
-      transition: height 0.3s ease;
-    }
-    #navbar nav {
-      display: flex;
-      gap: 2.5rem;
-      align-items: center;
-      transition: opacity 0.25s ease, transform 0.25s ease;
-    }
-    #navbar .logo {
-      transition: transform 0.35s cubic-bezier(.4,0,.2,1);
-    }
-    #navbar.scrolled nav {
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(-4px);
+      justify-content: center;
+      padding: 0.35rem 0;
+      background: #C9A882;
+      transition: background 0.25s ease;
     }
     #navbar.scrolled {
-      padding: 0.4rem 4vw;
+      background: #ffffff;
+    }
+    #navbar .logo {
+      font-family: 'Teko', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.8rem, 2.4vw, 2.8rem);
+      letter-spacing: 0.02em;
+      color: #fff;
+      text-decoration: none;
+      transition: color 0.25s ease;
     }
     #navbar.scrolled .logo {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
+      color: var(--text);
     }
-    #navbar.scrolled .logo img {
-      height: 58px;
-    }
-    #navbar nav a {
-      font-size: 0.7rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--muted);
-      transition: color 0.2s;
-    }
-    #navbar nav a:hover { color: var(--text); }
-    #navbar nav a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
-    #navbar .nav-cta {
-      background: var(--accent);
-      color: #fff !important;
-      padding: 0.6rem 1.3rem;
-      border-radius: 2px;
-      font-size: 0.68rem;
-      letter-spacing: 0.15em;
-      transition: background 0.2s !important;
-    }
-    #navbar .nav-cta:hover { background: var(--accent-warm) !important; }
 
     /* ─── HERO ───────────────────────────────── */
     #hero {
-      margin-top: 68px;
+      margin-top: 84px;
       min-height: 92vh;
       position: relative;
       display: flex;
@@ -226,7 +208,7 @@
     #hero .hero-content {
       position: relative;
       z-index: 1;
-      padding: 4rem 6vw;
+      padding: 5.5rem 6vw 4rem;
       max-width: 640px;
     }
     #hero .hero-content .section-label { color: rgba(250,245,238,0.55); }
@@ -581,8 +563,11 @@
       padding: 8rem 4vw;
       background: var(--accent);
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-    #look-for .look-header { margin-bottom: 5rem; }
+    #look-for .look-header { margin-bottom: 5rem; max-width: 760px; width: 100%; }
     #look-for .look-header .section-label { color: rgba(255,255,255,0.6); }
     #look-for .look-header h2 {
       font-family: var(--font-display);
@@ -597,6 +582,7 @@
       flex-direction: column;
       gap: 5rem;
       max-width: 760px;
+      width: 100%;
     }
     #look-for .look-item {
       display: flex;
@@ -724,25 +710,24 @@
       #trust { grid-template-columns: 1fr; }
       #trust .trust-item { border-right: none; border-bottom: 1px solid rgba(92,42,16,.1); }
       #trust .trust-item:last-child { border-bottom: none; }
-      #navbar nav { display: none; }
+
     }
   </style>
 </head>
 <body>
 
   <!-- ══════════════════════════════════════════ -->
+  <!-- ANNOUNCEMENT BAR                           -->
+  <!-- ══════════════════════════════════════════ -->
+  <div id="announcement">
+    <strong>20% off Boards</strong>&nbsp;with code&nbsp;<strong>AGNI</strong>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
   <!-- NAVBAR                                     -->
   <!-- ══════════════════════════════════════════ -->
   <header id="navbar">
-    <a href="#" class="logo">
-      <img src="logo.PNG" alt="Agni Boards" />
-    </a>
-    <nav>
-      <a href="#benefits">Benefits</a>
-      <a href="#faqs">FAQs</a>
-      <a href="#closing-cta">Order</a>
-      <a href="https://instagram.com/agniboards.th" class="nav-cta">DM to Order</a>
-    </nav>
+    <a href="#" class="logo">agni</a>
   </header>
 
 
@@ -989,10 +974,6 @@
   </footer>
 
   <script>
-    const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => {
-      navbar.classList.toggle('scrolled', window.scrollY > 80);
-    });
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -1004,6 +985,12 @@
     }, { threshold: 0.25 });
 
     document.querySelectorAll('.look-item').forEach(el => observer.observe(el));
+
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 10);
+    }, { passive: true });
+
   </script>
 </body>
 </html>
