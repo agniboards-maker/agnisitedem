@@ -149,8 +149,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.5rem;
-      letter-spacing: 0.1em;
+      font-size: clamp(0.85rem, 2.5vw, 1.5rem);
+      letter-spacing: 0.06em;
       text-transform: uppercase;
       color: #3D1F08;
     }
@@ -165,28 +165,27 @@
       align-items: center;
       justify-content: center;
       padding: 0.35rem 0;
-      background: #C9A882;
-      transition: background 0.25s ease;
+      background: #ffffff;
+      opacity: 0;
+      pointer-events: none;
+      transition: background 0.25s ease, opacity 0.25s ease;
     }
     #navbar.scrolled {
-      background: #ffffff;
+      opacity: 1;
+      pointer-events: auto;
     }
     #navbar .logo {
       font-family: 'Teko', sans-serif;
       font-weight: 700;
       font-size: clamp(1.8rem, 2.4vw, 2.8rem);
       letter-spacing: 0.02em;
-      color: #fff;
-      text-decoration: none;
-      transition: color 0.25s ease;
-    }
-    #navbar.scrolled .logo {
       color: var(--text);
+      text-decoration: none;
     }
 
     /* ─── HERO ───────────────────────────────── */
     #hero {
-      margin-top: 84px;
+      margin-top: 44px;
       min-height: 92vh;
       position: relative;
       display: flex;
