@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agni Boards — The Oldest Recovery Tool on Earth</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&family=Barlow:wght@400&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:       #1C0C04;
+      --white:       #FAF5EE;
+      --sand:        #F0E4D0;
+      --accent:      #E8621A;
+      --accent-warm: #F4893A;
+      --text:        #5C2A10;
+      --muted:       #9A7A65;
+      --gold:        #C8943A;
+      --shopee:      #EE4D2D;
+      --font-display: 'Bebas Neue', cursive;
+      --font-serif:   'Playfair Display', serif;
+      --font-body:    'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--white);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 300;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { width: 100%; display: block; }
+
+    /* ─── UTILS ──────────────────────────────── */
+    .section-label {
+      font-family: var(--font-body);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.85rem 2rem;
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.15s;
+    }
+    .btn:hover  { transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn-dark {
+      background: var(--accent);
+      color: #fff;
+      border: 1px solid var(--accent);
+    }
+    .btn-dark:hover { background: var(--accent-warm); border-color: var(--accent-warm); }
+    .btn-cartoon {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      height: 3rem;
+      padding: 0 1.75rem;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #1a1a1a;
+      background: #fb923c;
+      border: 2px solid #1a1a1a;
+      border-radius: 9999px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.15s cubic-bezier(.34,1.56,.64,1), box-shadow 0.15s ease;
+      white-space: nowrap;
+    }
+    .btn-cartoon:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 0 0 #1a1a1a;
+    }
+    .btn-cartoon:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+    .btn-cartoon .cartoon-shine {
+      position: absolute;
+      top: 50%;
+      left: -100%;
+      width: 3.5rem;
+      height: 150%;
+      background: rgba(255,255,255,0.45);
+      transform: translateY(-50%) rotate(12deg);
+      transition: left 0.5s ease-in-out;
+      pointer-events: none;
+    }
+    .btn-cartoon:hover .cartoon-shine { left: 200%; }
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid rgba(92,42,16,.35);
+    }
+    .btn-outline:hover { background: var(--text); color: var(--white); border-color: var(--text); }
+    .btn-shopee {
+      background: var(--shopee);
+      color: #fff;
+      border: 1px solid var(--shopee);
+      border-radius: 9999px;
+    }
+    .btn-shopee:hover { filter: brightness(1.1); }
+    .btn-shopee-outline {
+      background: transparent;
+      color: var(--shopee);
+      border: 1px solid var(--shopee);
+    }
+    .btn-shopee-outline:hover { background: var(--shopee); color: #fff; }
+    .btn-light {
+      background: var(--white);
+      color: var(--accent);
+      border: 1px solid var(--white);
+    }
+    .btn-light:hover { background: var(--sand); border-color: var(--sand); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid rgba(255,255,255,0.4);
+    }
+    .btn-ghost:hover { border-color: var(--white); }
+    .btn-group { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    /* ─── NAVBAR ─────────────────────────────── */
+    #navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 4vw;
+      background: #ffffff;
+      border-bottom: 1px solid rgba(92,42,16,.1);
+      transition: padding 0.3s ease;
+    }
+    #navbar .logo img {
+      height: 70px;
+      width: auto;
+      transition: height 0.3s ease;
+    }
+    #navbar nav {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+    #navbar .logo {
+      transition: transform 0.35s cubic-bezier(.4,0,.2,1);
+    }
+    #navbar.scrolled nav {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-4px);
+    }
+    #navbar.scrolled {
+      padding: 0.4rem 4vw;
+    }
+    #navbar.scrolled .logo {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    #navbar.scrolled .logo img {
+      height: 58px;
+    }
+    #navbar nav a {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    #navbar nav a:hover { color: var(--text); }
+    #navbar nav a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+    #navbar .nav-cta {
+      background: var(--accent);
+      color: #fff !important;
+      padding: 0.6rem 1.3rem;
+      border-radius: 2px;
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      transition: background 0.2s !important;
+    }
+    #navbar .nav-cta:hover { background: var(--accent-warm) !important; }
+
+    /* ─── HERO ───────────────────────────────── */
+    #hero {
+      margin-top: 68px;
+      min-height: 92vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+    #hero .hero-image {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    #hero .hero-image img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+    #hero .hero-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(105deg, rgba(28,12,4,0.80) 0%, rgba(28,12,4,0.55) 55%, rgba(28,12,4,0.20) 100%);
+    }
+    #hero .hero-content {
+      position: relative;
+      z-index: 1;
+      padding: 4rem 6vw;
+      max-width: 640px;
+    }
+    #hero .hero-content .section-label { color: rgba(250,245,238,0.55); }
+    #hero .hero-content h1 {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 5vw, 5.5rem);
+      line-height: .92;
+      letter-spacing: 1px;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+    }
+    #hero .hero-content > p {
+      font-size: 1.1rem;
+      color: rgba(250,245,238,0.92);
+      line-height: 1.8;
+      max-width: 380px;
+      margin-bottom: 2.5rem;
+      font-weight: 400;
+    }
+    .hero-reviews {
+      margin-top: 2.5rem;
+      font-size: 0.75rem;
+      color: rgba(250,245,238,0.55);
+      letter-spacing: 0.05em;
+    }
+    .hero-reviews .stars { color: var(--gold); font-size: 0.9rem; margin-bottom: 0.4rem; }
+
+
+    /* ─── BENEFITS ───────────────────────────── */
+    #benefits {
+      background: #ffffff;
+      padding: 8rem 4vw;
+    }
+    #benefits .features-header {
+      text-align: center;
+      margin-bottom: 5rem;
+    }
+    #benefits .features-header h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      text-transform: uppercase;
+      letter-spacing: 0;
+      color: #3B2010;
+      line-height: 1;
+    }
+    #benefits .features-header p {
+      margin-top: 1rem;
+      color: #3B2010;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 400;
+      font-size: 1rem;
+      opacity: 0.65;
+    }
+    #benefits .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .feature-card {
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      text-align: left;
+      padding: 0;
+      box-shadow: none;
+    }
+    .feature-card:hover { transform: none; box-shadow: none; }
+    .feature-card .card-number {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 7rem;
+      line-height: 1;
+      color: #3B2010;
+      opacity: 0.18;
+      margin-bottom: -1.5rem;
+      letter-spacing: -2px;
+    }
+    .feature-card .card-image {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      border-radius: 0.5rem;
+      margin-bottom: 1.5rem;
+      display: block;
+    }
+    .feature-card h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0;
+      color: #3B2010;
+      margin-bottom: 0.6rem;
+    }
+    .feature-card p {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 400;
+      font-size: 0.92rem;
+      color: #3B2010;
+      line-height: 1.7;
+    }
+
+    /* ─── ORIGIN ─────────────────────────────── */
+    #origin {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 70vh;
+    }
+    #origin .origin-image {
+      background: var(--sand);
+      overflow: hidden;
+      min-height: 500px;
+    }
+    #origin .origin-image img { height: 100%; object-fit: cover; }
+    #origin .origin-content {
+      padding: 6rem 6vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: var(--white);
+    }
+    #origin .origin-content h2 {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 4vw, 5rem);
+      letter-spacing: 1px;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 1.5rem;
+    }
+    #origin .origin-content > p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.9;
+      max-width: 420px;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ─── STATS ──────────────────────────────── */
+    #stats {
+      border-top: 1px solid rgba(92,42,16,.1);
+      border-bottom: 1px solid rgba(92,42,16,.1);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+    #stats .stat {
+      padding: 3.5rem 2rem;
+      text-align: center;
+      border-right: 1px solid rgba(92,42,16,.1);
+    }
+    #stats .stat:last-child { border-right: none; }
+    #stats .stat .stat-number {
+      font-family: var(--font-display);
+      font-size: 3.5rem;
+      letter-spacing: 1px;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    #stats .stat p {
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ─── TESTIMONIALS (ported from demo.tsx component) ── */
+    #testimonials {
+      padding: 8rem 4vw;
+      background: var(--black);
+      color: var(--white);
+    }
+    #testimonials .testimonials-header { margin-bottom: 4rem; }
+    #testimonials .testimonials-header .section-label { color: rgba(245,240,232,.4); }
+    #testimonials .testimonials-header h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 4vw, 4rem);
+      letter-spacing: 1px;
+    }
+    /* grid-cols-1 → sm:grid-cols-2 → lg:grid-cols-3 */
+    #testimonials .testimonials-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    @media (min-width: 640px) {
+      #testimonials .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 1024px) {
+      #testimonials .testimonials-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    /* card: bg-background ring-foreground/10 rounded-2xl border border-transparent p-4 ring-1 */
+    #testimonials .testimonial-card {
+      background: rgba(245,240,232,.05);
+      border: 1px solid transparent;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 0 0 1px rgba(245,240,232,.1);
+      display: flex;
+      flex-direction: column;
+    }
+    /* star row */
+    #testimonials .t-stars {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 1rem;
+    }
+    #testimonials .t-stars svg { width: 1rem; height: 1rem; }
+    #testimonials .t-star-filled  { fill: var(--gold); stroke: var(--gold); }
+    #testimonials .t-star-empty   { fill: rgba(245,240,232,.15); stroke: transparent; }
+    /* content: text-foreground my-4 */
+    #testimonials .t-content {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: rgba(245,240,232,.88);
+      flex: 1;
+      margin: 0 0 1.25rem;
+    }
+    /* footer row: flex items-center gap-2 */
+    #testimonials .t-footer {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    /* Avatar: size-8 rounded-full border ring-1 */
+    #testimonials .t-avatar {
+      width: 2rem; height: 2rem;
+      border-radius: 50%;
+      border: 1px solid transparent;
+      box-shadow: 0 0 0 1px rgba(245,240,232,.12);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 500; color: #fff;
+      flex-shrink: 0;
+    }
+    #testimonials .t-avatar--orange { background: var(--accent); }
+    #testimonials .t-avatar--brown  { background: #7B3A1E; }
+    #testimonials .t-avatar--gold   { background: var(--gold); }
+    /* text-foreground text-sm font-medium */
+    #testimonials .t-name {
+      font-size: 0.82rem;
+      font-weight: 500;
+      white-space: nowrap;
+      color: rgba(245,240,232,.9);
+    }
+    /* bg-foreground/25 size-1 rounded-full */
+    #testimonials .t-sep {
+      width: 0.25rem; height: 0.25rem;
+      border-radius: 50%;
+      background: rgba(245,240,232,.25);
+      flex-shrink: 0;
+    }
+    /* text-muted-foreground text-sm */
+    #testimonials .t-role {
+      font-size: 0.75rem;
+      color: rgba(245,240,232,.4);
+      letter-spacing: 0.03em;
+    }
+    #testimonials .t-role a {
+      color: rgba(245,240,232,.65);
+      border-bottom: 1px solid rgba(245,240,232,.25);
+      transition: color 0.2s;
+    }
+    #testimonials .t-role a:hover { color: var(--accent-warm); }
+    #testimonials .testimonials-cta {
+      margin-top: 3rem;
+      font-size: 0.75rem;
+      color: rgba(245,240,232,.4);
+      letter-spacing: 0.08em;
+    }
+    #testimonials .testimonials-cta a {
+      color: rgba(245,240,232,.7);
+      border-bottom: 1px solid rgba(245,240,232,.3);
+      transition: color 0.2s;
+    }
+    #testimonials .testimonials-cta a:hover { color: var(--accent-warm); }
+
+    /* ─── FAQS ───────────────────────────────── */
+    #faqs {
+      padding: 6rem 4vw;
+      background: var(--white);
+    }
+    #faqs .faqs-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    #faqs .faqs-header h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      letter-spacing: 3px;
+      color: var(--accent);
+    }
+    #faqs .faq-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85rem;
+      max-width: 1020px;
+      margin: 0 auto;
+      align-items: start;
+    }
+    #faqs .faq-item {
+      background: var(--text);
+      border-radius: 0.65rem;
+      overflow: hidden;
+    }
+    #faqs .faq-item summary {
+      padding: 1.2rem 1.4rem;
+      font-size: 0.88rem;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--white);
+      font-weight: 400;
+      user-select: none;
+    }
+    #faqs .faq-item summary::-webkit-details-marker { display: none; }
+    #faqs .faq-item summary::after {
+      content: '+';
+      font-size: 1.3rem;
+      color: var(--white);
+      flex-shrink: 0;
+      margin-left: 1rem;
+    }
+    #faqs details[open] summary::after { content: '−'; }
+    #faqs .faq-answer {
+      padding: 0 1.4rem 1.2rem;
+      font-size: 0.83rem;
+      color: rgba(250,245,238,0.72);
+      line-height: 1.8;
+    }
+    #faqs .faqs-contact {
+      margin-top: 2.5rem;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    #faqs .faqs-contact a {
+      color: var(--accent);
+      border-bottom: 1px solid rgba(232,98,26,.3);
+      transition: border-color 0.2s;
+    }
+    #faqs .faqs-contact a:hover { border-color: var(--accent); }
+
+    /* ─── LOOK FOR ───────────────────────────── */
+    #look-for {
+      padding: 8rem 4vw;
+      background: var(--accent);
+      overflow: hidden;
+    }
+    #look-for .look-header { margin-bottom: 5rem; }
+    #look-for .look-header .section-label { color: rgba(255,255,255,0.6); }
+    #look-for .look-header h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 4.5vw, 4.5rem);
+      font-weight: 900;
+      text-shadow: 1px 1px 0 rgba(0,0,0,0.15);
+      letter-spacing: 1px;
+      color: #fff;
+    }
+    #look-for .look-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 5rem;
+      max-width: 760px;
+    }
+    #look-for .look-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 2.5rem;
+      opacity: 0;
+      transform: translateX(-60px);
+      transition: opacity 0.6s ease, transform 0.6s cubic-bezier(.4,0,.2,1);
+    }
+    #look-for .look-item.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    #look-for .look-item .look-number {
+      font-family: var(--font-display);
+      font-size: 6rem;
+      color: #fff;
+      opacity: 0.25;
+      line-height: 1;
+      flex-shrink: 0;
+      letter-spacing: 2px;
+    }
+    #look-for .look-item .look-text h3 {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      letter-spacing: 0.5px;
+      color: #fff;
+      margin-bottom: 0.75rem;
+    }
+    #look-for .look-item .look-text p {
+      font-size: 0.92rem;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.8;
+      max-width: 500px;
+    }
+
+    /* ─── TRUST BAR ──────────────────────────── */
+    #trust {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid rgba(92,42,16,.1);
+    }
+    #trust .trust-item {
+      padding: 2.5rem 2rem;
+      text-align: center;
+      border-right: 1px solid rgba(92,42,16,.1);
+    }
+    #trust .trust-item:last-child { border-right: none; }
+    #trust .trust-item h4 {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+      font-weight: 500;
+    }
+    #trust .trust-item p { font-size: 0.78rem; color: var(--muted); }
+    #trust .trust-item a { color: var(--accent); transition: opacity 0.2s; }
+    #trust .trust-item a:hover { opacity: 0.75; }
+
+    /* ─── CLOSING CTA ────────────────────────── */
+    #closing-cta {
+      padding: 8rem 4vw;
+      text-align: center;
+      background: var(--white);
+      color: var(--text);
+    }
+    #closing-cta .section-label { color: var(--muted); }
+    #closing-cta h2 {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 5vw, 5.5rem);
+      letter-spacing: 1px;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+    #closing-cta > p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+      letter-spacing: 0.08em;
+    }
+    #closing-cta .btn-group { justify-content: center; }
+
+    /* ─── FOOTER ─────────────────────────────── */
+    #footer {
+      padding: 3rem 4vw;
+      border-top: 1px solid rgba(92,42,16,.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    #footer .footer-logo img { height: 72px; width: auto; }
+    #footer .footer-links { display: flex; gap: 2rem; flex-wrap: wrap; }
+    #footer .footer-links a {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    #footer .footer-links a:hover { color: var(--text); }
+    #footer .footer-copy {
+      font-size: 0.7rem;
+      color: var(--muted);
+      width: 100%;
+      text-align: center;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(92,42,16,.06);
+    }
+
+    /* ─── RESPONSIVE ─────────────────────────── */
+    @media (max-width: 768px) {
+      #hero .hero-content { padding: 3rem 6vw; }
+      #benefits .features-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+      #origin { grid-template-columns: 1fr; }
+      #stats { grid-template-columns: 1fr; }
+      #stats .stat { border-right: none; border-bottom: 1px solid rgba(92,42,16,.1); }
+      #stats .stat:last-child { border-bottom: none; }
+      #testimonials .testimonials-grid { grid-template-columns: 1fr; }
+      #faqs .faq-grid { grid-template-columns: 1fr; }
+      #look-for .look-grid { grid-template-columns: 1fr; }
+      #trust { grid-template-columns: 1fr; }
+      #trust .trust-item { border-right: none; border-bottom: 1px solid rgba(92,42,16,.1); }
+      #trust .trust-item:last-child { border-bottom: none; }
+      #navbar nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- NAVBAR                                     -->
+  <!-- ══════════════════════════════════════════ -->
+  <header id="navbar">
+    <a href="#" class="logo">
+      <img src="logo.PNG" alt="Agni Boards" />
+    </a>
+    <nav>
+      <a href="#benefits">Benefits</a>
+      <a href="#faqs">FAQs</a>
+      <a href="#closing-cta">Order</a>
+      <a href="https://instagram.com/agniboards.th" class="nav-cta">DM to Order</a>
+    </nav>
+  </header>
+
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- HERO                                       -->
+  <!-- ══════════════════════════════════════════ -->
+  <section id="hero">
+    <div class="hero-image">
+      <img src="18CB8CEF-1621-4EF8-AA98-7CD135B82832.png" alt="Agni Boards acupressure product" />
+    </div>
+    <div class="hero-content">
+      <p class="section-label">Ancient practice · Handmade in Thailand</p>
+      <h1>The oldest recovery tool on earth</h1>
+      <p>Used for thousands of years</p>
+      <div class="btn-group">
+        <a href="https://instagram.com/agniboards.th" class="btn-cartoon">
+          <span style="position:relative;z-index:1">DM to Order →</span>
+          <div class="cartoon-shine"></div>
+        </a>
+        <a href="https://th.shp.ee/LyKy1Pm2" class="btn btn-shopee">Shopee →</a>
+      </div>
+    </div>
+  </section>
+
+
+
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- BENEFITS                                   -->
+  <!-- ══════════════════════════════════════════ -->
+  <section id="benefits">
+    <div class="features-header">
+      <h2>Top 3 benefits of acupressure</h2>
+      <p>Two minutes a day. Your body will notice.</p>
+    </div>
+    <div class="features-grid">
+
+      <div class="feature-card">
+        <div class="card-number">01</div>
+        <img class="card-image" src="adtype.JPG" alt="Deeper Sleep" />
+        <h3>Deeper Sleep</h3>
+        <p>Two minutes activates the nervous system and triggers a release that carries you into rest.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="card-number">02</div>
+        <img class="card-image" src="asiangirl.PNG" alt="Tension Relief" />
+        <h3>Tension Relief</h3>
+        <p>The nail pressure reaches deep into the fascia of the foot, releasing built-up stress from the day.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="card-number">03</div>
+        <img class="card-image" src="yogamodel.png" alt="Nervous System Reset" />
+        <h3>Nervous System Reset</h3>
+        <p>The initial intensity fades into calm. That shift — that's your body letting go.</p>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- ORIGIN — 5,000 YEARS                       -->
+  <!-- ══════════════════════════════════════════ -->
+  <section id="origin">
+    <div class="origin-image">
+      <img src="lady.PNG" alt="Agni Board acupressure nails close-up" />
+    </div>
+    <div class="origin-content">
+      <p class="section-label">The practice</p>
+      <h2>5,000 years old.</h2>
+      <p>Agni Boards apply an ancient Indian practice to your day. No batteries. No app. Just 5,000 years of proof. Stand on them and feel the difference.</p>
+      <a href="https://instagram.com/agniboards.th" class="btn btn-dark" style="border-radius: 9999px">DM to Order →</a>
+    </div>
+  </section>
+
+
+
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- TESTIMONIALS                               -->
+  <!-- ══════════════════════════════════════════ -->
+  <section id="testimonials">
+    <div class="testimonials-header">
+      <h2>What people are saying</h2>
+    </div>
+    <div class="testimonials-grid">
+
+      <div class="testimonial-card">
+        <div class="t-stars">
+          <svg viewBox="0 0 24 24" class="t-star-filled" xmlns="http://www.w3.org/2000/svg"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 24 24" class="t-star-filled" xmlns="http://www.w3.org/2000/svg"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 24 24" class="t-star-filled" xmlns="http://www.w3.org/2000/svg"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 24 24" class="t-star-filled" xmlns="http://www.w3.org/2000/svg"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 24 24" class="t-star-filled" xmlns="http://www.w3.org/2000/svg"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <p class="t-content">"I've done cold plunges, breathwork, all of it. Nothing resets me this fast."</p>
+        <div class="t-footer">
+          <span class="t-name">Yoga Instructor</span>
+          <span class="t-sep" aria-hidden="true"></span>
+          <span class="t-role">Bangkok · Verified Customer</span>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="t-stars">
+          <svg viewBox="0 0 24 24" class="t-star-filled" xmlns="http://www.w3.org/2000/svg"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 24 24" class="t-star-filled" xmlns="http://www.w3.org/2000/svg"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 24 24" class="t-star-filled" xmlns="http://www.w3.org/2000/svg"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 24 24" class="t-star-filled" xmlns="http://www.w3.org/2000/svg"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 24 24" class="t-star-filled" xmlns="http://www.w3.org/2000/svg"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <p class="t-content">"Two minutes before bed and I sleep better than I have in years."</p>
+        <div class="t-footer">
+          <span class="t-name">Night-owl Convert</span>
+          <span class="t-sep" aria-hidden="true"></span>
+          <span class="t-role">Koh Phangan · Verified Customer</span>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="t-stars">
+          <svg viewBox="0 0 24 24" class="t-star-filled" xmlns="http://www.w3.org/2000/svg"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 24 24" class="t-star-filled" xmlns="http://www.w3.org/2000/svg"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 24 24" class="t-star-filled" xmlns="http://www.w3.org/2000/svg"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 24 24" class="t-star-filled" xmlns="http://www.w3.org/2000/svg"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 24 24" class="t-star-filled" xmlns="http://www.w3.org/2000/svg"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <p class="t-content">"I love them soooo much the sensation on my feet is amazing. Thank you!"</p>
+        <div class="t-footer">
+          <span class="t-name">Marathon Runner</span>
+          <span class="t-sep" aria-hidden="true"></span>
+          <span class="t-role">Chiang Mai · Verified Customer</span>
+        </div>
+      </div>
+
+    </div>
+    <p class="testimonials-cta">Share yours → <a href="https://instagram.com/agniboards.th">@agniboards.th</a></p>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- FAQS                                       -->
+  <!-- ══════════════════════════════════════════ -->
+  <section id="faqs">
+    <div class="faqs-header">
+      <h2>Acupressure FAQS</h2>
+    </div>
+
+    <div class="faq-grid">
+
+      <details class="faq-item">
+        <summary>What is acupressure?</summary>
+        <p class="faq-answer">A practice rooted in Indian and Chinese medicine, thousands of years old. It works by applying pressure to specific points on the body - stimulating the nervous system, releasing tension, and shifting you into a state of calm. No needles. No recovery time. Just pressure.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>What does acupressure actually do?</summary>
+        <p class="faq-answer">Your nervous system holds more than you think. Stress, tension, poor sleep - a lot of it lives in the body, not just the mind. Acupressure gives it somewhere to go. Regular use supports deeper sleep, reduced stress, and a body that feels less like it's carrying everything.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>How do I use an Acupressure Board?</summary>
+        <p class="faq-answer">Place it on a flat surface. Step on with both feet - hold a wall if you're new to it. The intensity is immediate. Breathe through it. Within 30 seconds it shifts as your nervous system adjusts and begins to release. Two minutes is enough. Step off and feel the difference.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Can acupressure help with back pain?</summary>
+        <p class="faq-answer">Yes. The pressure points on the sole of the foot connect throughout the body. Standing on the board boosts circulation and triggers a release of built-up tension - which often shows up as back stiffness. It won't fix an injury, but if your back carries the weight of your day, you'll notice the difference.</p>
+      </details>
+
+    </div>
+
+    <p class="faqs-contact">Questions? <a href="https://instagram.com/agniboards.th">DM us on Instagram →</a> We respond to every message.</p>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- WHAT TO LOOK FOR                           -->
+  <!-- ══════════════════════════════════════════ -->
+  <section id="look-for">
+    <div class="look-header">
+      <p class="section-label">Why Agni</p>
+      <h2>What to look for in any acupressure board.</h2>
+    </div>
+    <div class="look-grid">
+
+      <div class="look-item">
+        <div class="look-number">01</div>
+        <div class="look-text">
+          <h3>Real nails</h3>
+          <p>The sharpness is the point - literally. Agni Boards use reinforced carbon steel nails that hold their edge and their shape.</p>
+        </div>
+      </div>
+
+      <div class="look-item">
+        <div class="look-number">02</div>
+        <div class="look-text">
+          <h3>Built to last</h3>
+          <p>Acupressure has survived 5,000 years for a reason. Your board should too. Solid wood base, quality metal nails — no bending, no breaking, no replacing after a few months.</p>
+        </div>
+      </div>
+
+      <div class="look-item">
+        <div class="look-number">03</div>
+        <div class="look-text">
+          <h3>The right intensity for you</h3>
+          <p>Tension is personal. What resets one person overwhelms another. Three difficulty levels means you find your edge - and work with it.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+<!-- ══════════════════════════════════════════ -->
+  <!-- CLOSING CTA                                -->
+  <!-- ══════════════════════════════════════════ -->
+  <section id="closing-cta">
+    <p class="section-label">Ready?</p>
+    <h2>Feel it for yourself.</h2>
+    <p>Starting from 2,800 THB · Free jute carry bag · 8 designs available</p>
+    <div class="btn-group">
+      <a href="https://instagram.com/agniboards.th" class="btn btn-dark" style="border-radius:9999px">DM on Instagram →</a>
+      <a href="https://th.shp.ee/LyKy1Pm2" class="btn btn-outline" style="border-radius:9999px">Buy on Shopee →</a>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- FOOTER                                     -->
+  <!-- ══════════════════════════════════════════ -->
+  <footer id="footer">
+    <div class="footer-logo">
+      <img src="logo.PNG" alt="Agni Boards" />
+    </div>
+    <div class="footer-links">
+      <a href="https://instagram.com/agniboards.th">Instagram</a>
+      <a href="https://th.shp.ee/LyKy1Pm2">Shopee</a>
+      <a href="#faqs">FAQ</a>
+      <a href="https://instagram.com/agniboards.th">Contact</a>
+    </div>
+    <p class="footer-copy">© 2026 Agni Boards · Handcrafted in Thailand · Acupressure · Made with fire.</p>
+  </footer>
+
+  <script>
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 80);
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.25 });
+
+    document.querySelectorAll('.look-item').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+node_modules/
+.claude/
+
+# dev scripts
+serve.mjs
+serve.ps1
+screenshot.cjs
+package.json
+package-lock.json
+
+# reference & screenshot artifacts
+screenshot_round1.png
+screenshot_round2.png
+screenshot_testimonials.png
+FAQ.png
+shaktimat*
