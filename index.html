@@ -787,6 +787,69 @@
       #trust .trust-item:last-child { border-bottom: none; }
 
     }
+    /* ── Legal Modal ── */
+    .legal-modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(40,15,5,0.55);
+      backdrop-filter: blur(4px);
+      z-index: 9000;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .legal-modal-backdrop.open { display: flex; }
+    .legal-modal {
+      background: var(--white);
+      border-radius: 1.25rem;
+      max-width: 560px;
+      width: 100%;
+      padding: 2.5rem 2rem 2rem;
+      position: relative;
+      box-shadow: 0 8px 40px rgba(92,42,16,0.18), 0 2px 8px rgba(92,42,16,0.08);
+    }
+    .legal-modal h3 {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+    .legal-modal p {
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      line-height: 1.75;
+      color: var(--muted);
+    }
+    .legal-modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1.25rem;
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: var(--muted);
+      line-height: 1;
+      transition: color 0.2s;
+    }
+    .legal-modal-close:hover { color: var(--text); }
+    .footer-legal {
+      margin-top: 0.75rem;
+      display: flex;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .footer-legal a {
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .footer-legal a:hover { color: var(--text); }
   </style>
 </head>
 <body>
@@ -811,7 +874,7 @@
   <!-- ══════════════════════════════════════════ -->
   <section id="hero">
     <div class="hero-image">
-      <img src="18CB8CEF-1621-4EF8-AA98-7CD135B82832.png" alt="Agni Boards acupressure product" />
+      <img src="18CB8CEF-1621-4EF8-AA98-7CD135B82832.png" alt="Woman standing on Agni acupressure nail board — ancient Indian wellness practice" />
     </div>
     <div class="hero-content">
       <p class="section-label">Ancient practice · Handmade in Thailand</p>
@@ -839,21 +902,21 @@
 
       <div class="feature-card">
         <div class="card-number">01</div>
-        <img class="card-image" src="adtype.JPG" alt="Deeper Sleep" />
+        <img class="card-image" src="adtype.JPG" alt="Person resting peacefully after acupressure board session for deeper sleep" />
         <h3>Deeper Sleep</h3>
         <p>Two minutes activates the nervous system and triggers a release that carries you into rest.</p>
       </div>
 
       <div class="feature-card">
         <div class="card-number">02</div>
-        <img class="card-image" src="asiangirl.PNG" alt="Tension Relief" />
+        <img class="card-image" src="asiangirl.PNG" alt="Woman standing on Agni acupressure board to relieve foot and body tension" />
         <h3>Tension Relief</h3>
         <p>The nail pressure reaches deep into the fascia of the foot, releasing built-up stress from the day.</p>
       </div>
 
       <div class="feature-card">
         <div class="card-number">03</div>
-        <img class="card-image" src="yogamodel.png" alt="Nervous System Reset" />
+        <img class="card-image" src="yogamodel.png" alt="Woman in relaxed wellness pose after Agni acupressure board nervous system reset" />
         <h3>Nervous System Reset</h3>
         <p>The initial intensity fades into calm. That shift — that's your body letting go.</p>
       </div>
@@ -867,7 +930,7 @@
   <!-- ══════════════════════════════════════════ -->
   <section id="origin">
     <div class="origin-image">
-      <img src="lady.PNG" alt="Agni Board acupressure nails close-up" />
+      <img src="lady.PNG" alt="Woman practising acupressure on Agni nail board — 5,000 year old Indian wellness tradition" />
     </div>
     <div class="origin-content">
       <p class="section-label">The practice</p>
@@ -1043,7 +1106,22 @@
       <a href="https://instagram.com/agniboards.th">Contact</a>
     </div>
     <p class="footer-copy">© 2026 Agni Boards · Handcrafted in Thailand · Acupressure · Made with fire.</p>
+    <div class="footer-legal">
+      <a onclick="openLegal('disclaimer')">Disclaimer</a>
+      <a onclick="openLegal('returns')">Returns</a>
+      <a onclick="openLegal('shipping')">Shipping</a>
+      <a onclick="openLegal('privacy')">Privacy</a>
+    </div>
   </footer>
+
+  <!-- Legal Modals -->
+  <div class="legal-modal-backdrop" id="legal-backdrop" onclick="closeLegalOnBackdrop(event)">
+    <div class="legal-modal">
+      <button class="legal-modal-close" onclick="closeLegal()" aria-label="Close">&#x2715;</button>
+      <h3 id="legal-title"></h3>
+      <p id="legal-body"></p>
+    </div>
+  </div>
 
   <script>
 
@@ -1062,6 +1140,44 @@
     window.addEventListener('scroll', () => {
       navbar.classList.toggle('scrolled', window.scrollY > 10);
     }, { passive: true });
+
+    const legalContent = {
+      disclaimer: {
+        title: 'Disclaimer',
+        body: 'Agni Boards are wellness tools designed for relaxation and recovery. They are not medical devices and are not intended to diagnose, treat, cure, or prevent any medical condition. If you have any health concerns, consult a medical professional before use. Use at your own discretion.'
+      },
+      returns: {
+        title: 'Return Policy',
+        body: 'We stand behind our product. If there is a manufacturing defect or damage on our end, we will accept returns within 30 days of purchase. Contact us via Instagram DM at @agniboards.th with your order details and a photo of the issue. Returns due to change of mind are not accepted.'
+      },
+      shipping: {
+        title: 'Shipping Policy',
+        body: 'We ship across Thailand via multiple couriers. Delivery typically takes 1–3 days within Bangkok and 3–7 days for other provinces. We are not responsible for delays caused by the courier.'
+      },
+      privacy: {
+        title: 'Privacy Policy',
+        body: 'We collect your name and delivery address solely for the purpose of processing and shipping your order. This information is not shared with third parties and is not used for any other purpose.'
+      }
+    };
+
+    function openLegal(key) {
+      const { title, body } = legalContent[key];
+      document.getElementById('legal-title').textContent = title;
+      document.getElementById('legal-body').textContent = body;
+      document.getElementById('legal-backdrop').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLegal() {
+      document.getElementById('legal-backdrop').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function closeLegalOnBackdrop(e) {
+      if (e.target === document.getElementById('legal-backdrop')) closeLegal();
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLegal(); });
 
   </script>
 </body>
