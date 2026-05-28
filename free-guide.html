@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KX12B75MQY"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-KX12B75MQY');
+  </script>
+
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "wqiea37g9y");
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free Beginner's Guide — Agni Boards</title>
+  <meta name="description" content="Download Agni Boards' free beginner's guide. Everything you need for your first time on the board. How it works, how to step on, how to build your practice. No sign-up required." />
+  <link rel="canonical" href="https://agniboards.com/free-guide" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://agniboards.com/free-guide" />
+  <meta property="og:title" content="Free Beginner's Guide — Agni Boards" />
+  <meta property="og:description" content="Everything you need for your first time on the board. Free, no sign-up required." />
+  <meta property="og:image" content="https://agniboards.com/18CB8CEF-1621-4EF8-AA98-7CD135B82832.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Free Beginner's Guide — Agni Boards" />
+  <meta name="twitter:description" content="Everything you need for your first time on the board. Free, no sign-up required." />
+  <meta name="twitter:image" content="https://agniboards.com/18CB8CEF-1621-4EF8-AA98-7CD135B82832.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&family=Barlow:wght@400&family=Barlow+Condensed:wght@700;900&family=Teko:wght@700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:       #1C0C04;
+      --white:       #FAF5EE;
+      --sand:        #F0E4D0;
+      --accent:      #E8621A;
+      --accent-warm: #F4893A;
+      --text:        #5C2A10;
+      --muted:       #9A7A65;
+      --gold:        #C8943A;
+      --shopee:      #EE4D2D;
+      --line:        #06C755;
+      --font-display: 'Bebas Neue', cursive;
+      --font-serif:   'Playfair Display', serif;
+      --font-body:    'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--white);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 300;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { width: 100%; display: block; }
+
+    .section-label {
+      font-family: var(--font-body);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    /* ─── BUTTONS ────────────────────────────── */
+    .btn {
+      display: inline-block;
+      padding: 0.85rem 2rem;
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.15s;
+    }
+    .btn:hover  { transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn-cartoon {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      height: 3.25rem;
+      padding: 0 2.25rem;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #1a1a1a;
+      background: #fb923c;
+      border: 2px solid #1a1a1a;
+      border-radius: 9999px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.15s cubic-bezier(.34,1.56,.64,1), box-shadow 0.15s ease;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .btn-cartoon:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 0 0 #1a1a1a;
+    }
+    .btn-cartoon:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+    .btn-cartoon .cartoon-shine {
+      position: absolute;
+      top: 50%;
+      left: -100%;
+      width: 3.5rem;
+      height: 150%;
+      background: rgba(255,255,255,0.45);
+      transform: translateY(-50%) rotate(12deg);
+      transition: left 0.5s ease-in-out;
+      pointer-events: none;
+    }
+    .btn-cartoon:hover .cartoon-shine { left: 200%; }
+
+    /* ─── ANNOUNCEMENT BAR ───────────────────── */
+    #announcement {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 101;
+      height: 44px;
+      background: #C9A882;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(0.85rem, 2.5vw, 1.5rem);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #3D1F08;
+    }
+    #announcement strong { font-weight: 700; }
+
+    /* ─── NAVBAR ─────────────────────────────── */
+    #navbar {
+      position: fixed;
+      top: 44px; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.35rem 4vw;
+      background: #ffffff;
+      border-bottom: 1px solid rgba(92,42,16,.06);
+      box-shadow: 0 1px 12px rgba(92,42,16,0.06);
+    }
+    #navbar .logo {
+      font-family: 'Teko', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.8rem, 2.4vw, 2.8rem);
+      letter-spacing: 0.02em;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+    .nav-link {
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    .nav-link:hover { color: var(--accent); }
+    .nav-link.active { color: var(--text); font-weight: 500; }
+
+    /* ─── GUIDE HERO ─────────────────────────── */
+    #guide-hero {
+      margin-top: calc(44px + 52px); /* announcement + navbar */
+      min-height: calc(100vh - 44px - 52px - 100px);
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6rem 4vw 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Subtle radial texture behind content */
+    #guide-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 15% 80%, rgba(200,148,58,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 50% at 85% 20%, rgba(232,98,26,0.05) 0%, transparent 55%);
+      pointer-events: none;
+    }
+
+    .guide-content {
+      position: relative;
+      z-index: 1;
+      max-width: 620px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .guide-content .section-label { color: var(--muted); }
+
+    .guide-content h1 {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      line-height: 0.92;
+      letter-spacing: 1px;
+      color: var(--text);
+      margin-bottom: 1.75rem;
+    }
+
+    .guide-content .guide-subtext {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 460px;
+      margin: 0 auto 2.5rem;
+      font-weight: 300;
+    }
+
+    .guide-download-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .guide-no-signup {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: 0.75;
+    }
+
+    /* Decorative divider line */
+    .guide-divider {
+      width: 40px;
+      height: 1px;
+      background: rgba(92,42,16,0.15);
+      margin: 3rem auto 0;
+    }
+
+    /* What's inside strip */
+    .guide-inside {
+      margin-top: 3.5rem;
+      padding: 2rem;
+      background: var(--sand);
+      border-radius: 0.75rem;
+      text-align: left;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .guide-inside h3 {
+      font-family: var(--font-body);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+    .guide-inside ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .guide-inside ul li {
+      font-size: 0.85rem;
+      color: var(--text);
+      line-height: 1.5;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+    }
+    .guide-inside ul li::before {
+      content: '—';
+      color: var(--accent);
+      flex-shrink: 0;
+      font-size: 0.8rem;
+      margin-top: 0.05em;
+    }
+
+    /* ─── FOOTER ─────────────────────────────── */
+    #footer {
+      padding: 3rem 4vw;
+      border-top: 1px solid rgba(92,42,16,.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    #footer .footer-logo img { height: 72px; width: auto; }
+    #footer .footer-links { display: flex; gap: 2rem; flex-wrap: wrap; }
+    #footer .footer-links a {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    #footer .footer-links a:hover { color: var(--text); }
+    #footer .footer-copy {
+      font-size: 0.7rem;
+      color: var(--muted);
+      width: 100%;
+      text-align: center;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(92,42,16,.06);
+    }
+
+    /* ─── LEGAL MODAL ────────────────────────── */
+    .legal-modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(40,15,5,0.55);
+      backdrop-filter: blur(4px);
+      z-index: 9000;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .legal-modal-backdrop.open { display: flex; }
+    .legal-modal {
+      background: var(--white);
+      border-radius: 1.25rem;
+      max-width: 560px;
+      width: 100%;
+      padding: 2.5rem 2rem 2rem;
+      position: relative;
+      box-shadow: 0 8px 40px rgba(92,42,16,0.18), 0 2px 8px rgba(92,42,16,0.08);
+    }
+    .legal-modal h3 {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+    .legal-modal p {
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      line-height: 1.75;
+      color: var(--muted);
+    }
+    .legal-modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1.25rem;
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: var(--muted);
+      line-height: 1;
+      transition: color 0.2s;
+    }
+    .legal-modal-close:hover { color: var(--text); }
+    .footer-legal {
+      margin-top: 0.75rem;
+      display: flex;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .footer-legal a {
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .footer-legal a:hover { color: var(--text); }
+
+    @media (max-width: 640px) {
+      #guide-hero { padding: 4rem 6vw 4rem; }
+      .guide-content h1 { font-size: clamp(2.6rem, 10vw, 4rem); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ANNOUNCEMENT BAR -->
+  <div id="announcement">
+    <strong>20% off Boards</strong>&nbsp;with code&nbsp;<strong>AGNI</strong>
+  </div>
+
+  <!-- NAVBAR -->
+  <header id="navbar">
+    <a href="/" class="logo">agni</a>
+    <nav class="nav-links">
+      <a href="/free-guide" class="nav-link active">Free Guide</a>
+    </nav>
+  </header>
+
+  <!-- GUIDE HERO -->
+  <main id="guide-hero">
+    <div class="guide-content">
+
+      <p class="section-label">Free Resource</p>
+      <h1>Your free beginner's guide</h1>
+      <p class="guide-subtext">Everything you need for your first time on the board. How it works, how to step on, how to build your practice. Free, no sign-up required.</p>
+
+      <div class="guide-download-wrap">
+        <a href="/guide.pdf" download="Agni Boards Guide.pdf" class="btn-cartoon">
+          <span class="cartoon-shine"></span>
+          Download the guide &rarr;
+        </a>
+        <span class="guide-no-signup">No sign-up · No email · Just a PDF</span>
+      </div>
+
+      <div class="guide-divider"></div>
+
+      <div class="guide-inside">
+        <h3>What's inside</h3>
+        <ul>
+          <li>What acupressure actually does to your body</li>
+          <li>How to step on for the first time without fear</li>
+          <li>Building a daily practice — from 30 seconds to 5 minutes</li>
+          <li>Which intensity level to start with</li>
+          <li>What to expect in the first week</li>
+        </ul>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer id="footer">
+    <div class="footer-logo">
+      <img src="logo.PNG" alt="Agni Boards" />
+    </div>
+    <div class="footer-links">
+      <a href="https://instagram.com/agniboards.th">Instagram</a>
+      <a href="https://shopee.co.th/Agni-Boards-V2-1-Accupresure-Board-i.1816711455.28894848894?extraParams=%7B%22display_model_id%22%3A350937227807%2C%22model_selection_logic%22%3A3%7D">Shopee</a>
+      <a href="/#faqs">FAQ</a>
+      <a href="https://instagram.com/agniboards.th">Contact</a>
+    </div>
+    <p class="footer-copy">© 2026 Agni Boards · Handcrafted in Thailand · Acupressure · Made with fire.</p>
+    <div class="footer-legal">
+      <a onclick="openLegal('disclaimer')">Disclaimer</a>
+      <a onclick="openLegal('returns')">Returns</a>
+      <a onclick="openLegal('shipping')">Shipping</a>
+      <a onclick="openLegal('privacy')">Privacy</a>
+    </div>
+  </footer>
+
+  <!-- Legal Modals -->
+  <div class="legal-modal-backdrop" id="legal-backdrop" onclick="closeLegalOnBackdrop(event)">
+    <div class="legal-modal">
+      <button class="legal-modal-close" onclick="closeLegal()" aria-label="Close">&#x2715;</button>
+      <h3 id="legal-title"></h3>
+      <p id="legal-body"></p>
+    </div>
+  </div>
+
+  <script>
+    const legalContent = {
+      disclaimer: {
+        title: 'Disclaimer',
+        body: 'Agni Boards are wellness tools designed for relaxation and recovery. They are not medical devices and are not intended to diagnose, treat, cure, or prevent any medical condition. If you have any health concerns, consult a medical professional before use. Use at your own discretion.'
+      },
+      returns: {
+        title: 'Return Policy',
+        body: 'We stand behind our product. If there is a manufacturing defect or damage on our end, we will accept returns within 30 days of purchase. Contact us via Instagram DM at @agniboards.th with your order details and a photo of the issue. Returns due to change of mind are not accepted.'
+      },
+      shipping: {
+        title: 'Shipping Policy',
+        body: 'We ship across Thailand via multiple couriers. Delivery typically takes 1–3 days within Bangkok and 3–7 days for other provinces. We are not responsible for delays caused by the courier.'
+      },
+      privacy: {
+        title: 'Privacy Policy',
+        body: 'We collect your name and delivery address solely for the purpose of processing and shipping your order. This information is not shared with third parties and is not used for any other purpose.'
+      }
+    };
+
+    function openLegal(key) {
+      const { title, body } = legalContent[key];
+      document.getElementById('legal-title').textContent = title;
+      document.getElementById('legal-body').textContent = body;
+      document.getElementById('legal-backdrop').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLegal() {
+      document.getElementById('legal-backdrop').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function closeLegalOnBackdrop(e) {
+      if (e.target === document.getElementById('legal-backdrop')) closeLegal();
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLegal(); });
+  </script>
+</body>
+</html>
