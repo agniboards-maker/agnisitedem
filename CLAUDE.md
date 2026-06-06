@@ -36,3 +36,4 @@
 - Do not "improve" a reference design — match it
 - Do not use `transition-all`
 - Do not use default Tailwind blue/indigo as primary color
+- now whenever i add some updates to this website can u make sure not to aumatically push it to github untill i exclusively tell you to
