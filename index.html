@@ -301,7 +301,13 @@
       inset: 0;
       z-index: 0;
     }
-    #hero .hero-image img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+    #hero .hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+      transform: scale(1.0);
+    }
     #hero .hero-image::after {
       content: '';
       position: absolute;
@@ -801,6 +807,10 @@
 
     /* ─── RESPONSIVE ─────────────────────────── */
     @media (max-width: 768px) {
+      #hero .hero-image img {
+        object-position: center 22%;
+        transform: scale(1.18);
+      }
       #hero .hero-content { padding: 3rem 6vw; }
       #benefits .features-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
       #origin { grid-template-columns: 1fr; }
@@ -905,7 +915,7 @@
   <!-- ══════════════════════════════════════════ -->
   <section id="hero">
     <div class="hero-image">
-      <img src="hero-final.png" alt="Woman standing on Agni acupressure nail board — ancient Indian wellness practice" />
+      <img src="hero-optimized.jpg" alt="Woman standing on Agni acupressure nail board — ancient Indian wellness practice" />
     </div>
     <div class="hero-content">
       <p class="section-label">Ancient practice · Handmade in Thailand</p>
