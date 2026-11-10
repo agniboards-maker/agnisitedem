@@ -14,3 +14,7 @@ screenshot_round2.png
 screenshot_testimonials.png
 FAQ.png
 shaktimat*
+
+# local secrets (Stripe keys)
+.env
+.env.local
