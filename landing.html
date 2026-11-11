@@ -2784,9 +2784,11 @@
       .sf-photo { position: absolute !important; inset: 0; opacity: 0; transform: translateX(40px); }
       .sf-photo.is-active { opacity: 1; transform: none; }
       .sf-left { text-align: center; }
-      .sf-steps { min-height: 150px !important; }
-      .sf-step { position: absolute !important; opacity: 0; transform: translateY(14px); margin-bottom: 0; }
-      .sf-step.is-active { position: relative !important; opacity: 1; transform: none; }
+      .sf-steps { min-height: 0 !important; margin-top: 1.75rem !important; }
+      /* Only the active heading is in the layout, so headings never stack on each other */
+      .sf-step { position: static !important; display: none; margin-bottom: 0; }
+      .sf-step.is-active { display: block; animation: sfStepIn .4s ease both; }
+      @keyframes sfStepIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
       .sf-step-body { margin-left: auto; margin-right: auto; }
       .sf-dots { display: flex !important; justify-content: center; margin-top: 1rem; }
       .sf-left .rs-h2 { display: none; }
@@ -2811,10 +2813,20 @@
     .buy-row { margin-top: 2rem !important; }
     .product-purchase { padding-top: 0 !important; }
     /* Phone: half the band under the header */
-    @media (max-width: 768px) { .product-shell { padding-top: 6.4rem !important; } }
+    @media (max-width: 768px) { .product-shell { padding-top: 4.9rem !important; } }
     /* After scrolling, the white header shrinks to just the logo row */
     .is-scrolled #navbar { padding-top: 0 !important; padding-bottom: 0 !important; }
     .is-scrolled #navbar .logo { line-height: 1 !important; }
+    /* Mobile: slimmer side margins, smaller rounded thumbnails, hero cropped 15% top and bottom */
+    @media (max-width: 768px) {
+      .rs-wrap, .rv-wrap, .sf-wrap { padding-left: 10px; padding-right: 10px; }
+      .product-purchase { padding-left: .6rem; padding-right: .6rem; }
+      .product-visual { min-height: 0; border-radius: 4px; overflow: hidden; }
+      .pv-main { flex: none; height: auto; aspect-ratio: 8 / 7; }
+      .pv-main img, .pv-main img.pv-slide { object-fit: cover; object-position: center; }
+      .pv-thumbs { gap: 8px; padding: 10px 0 0; justify-content: flex-start; margin: 0; }
+      .pv-thumb { width: 60px; height: 75px; flex: 0 0 60px; border-radius: 12px; }
+    }
   </style>
 </head>
 <body>
