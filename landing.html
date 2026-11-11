@@ -2858,7 +2858,7 @@
             </div>
 
             <div class="buy-row">
-              <a href="https://buy.stripe.com/8x2cN7fq1aHI4tsavTgIo01" class="btn btn-line mystery-buy" onclick="fbq('track','AddToCart');fbq('track','InitiateCheckout',{value:3200,currency:'THB'})"><span class="buy-label">Buy</span> <span class="buy-price">฿3,200</span> <s class="buy-old">฿3,500</s></a>
+              <a href="https://buy.stripe.com/8x2cN7fq1aHI4tsavTgIo01" class="btn btn-line mystery-buy" onclick="event.preventDefault();fbq('track','AddToCart');fbq('track','InitiateCheckout',{value:3200,currency:'THB'});var u=this.href;setTimeout(function(){location.href=u},400)"><span class="buy-label">Buy</span> <span class="buy-price">฿3,200</span> <s class="buy-old">฿3,500</s></a>
             </div>
             <div class="delivery-box">
               <div class="delivery-timeline">
