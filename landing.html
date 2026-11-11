@@ -2765,7 +2765,10 @@
     /* Phone: pull the product title up so it shows on first screen */
     @media (max-width: 768px) { .product-visual { margin-bottom: 0; min-height: 0; } .pdp-crumbs { margin: 0 0 .2rem; } .product-copy h1 { margin: 0 0 .6rem; } }
     /* Headings: Archivo Black for a heavier look */
-    h1, h2, h3, h4 { font-family: 'Archivo Black', sans-serif !important; zoom: .7; letter-spacing: -0.02em; }
+    h1, h2, h3, h4 { font-family: 'Archivo Black', sans-serif !important; zoom: .7; letter-spacing: -0.02em; text-transform: uppercase; }
+    /* Tighter section spacing and all-caps headings */
+    .rs-sec, #handmade, .sf-intro, .rv { padding-top: clamp(1.75rem, 3.5vw, 2.5rem) !important; padding-bottom: clamp(1.75rem, 3.5vw, 2.5rem) !important; }
+    #feature-scroll .sf-stick { padding-top: clamp(1rem, 2.5vh, 1.75rem) !important; padding-bottom: clamp(1rem, 2.5vh, 1.75rem) !important; }
   </style>
 </head>
 <body>
