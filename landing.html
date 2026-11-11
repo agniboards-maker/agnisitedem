@@ -2812,6 +2812,8 @@
     .product-purchase { padding-top: 0 !important; }
     /* Phone: half the band under the header */
     @media (max-width: 768px) { .product-shell { padding-top: 6.4rem !important; } }
+    /* After scrolling, the white header shrinks to just the logo row */
+    .is-scrolled #navbar { padding-top: .15rem !important; padding-bottom: .15rem !important; }
   </style>
 </head>
 <body>
@@ -3763,5 +3765,6 @@
       });
     })();
   </script>
+<script>(function(){function u(){document.body.classList.toggle('is-scrolled', window.scrollY > 40);}window.addEventListener('scroll',u,{passive:true});u();})();</script>
 </body>
 </html>
