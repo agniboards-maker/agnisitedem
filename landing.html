@@ -2527,8 +2527,8 @@
 
 
     /* Pinned, scroll-linked feature section (text left, photo right) */
-    .sf-track { position: relative; height: 300vh; background: #f8f3ee; }
-    .sf-stick { position: sticky; top: 0; height: 100vh; min-height: 560px; display: flex; align-items: center; overflow: hidden; }
+    .sf-track { position: relative; height: 200vh; background: #f8f3ee; }
+    .sf-stick { position: sticky; top: 0; height: auto; min-height: 0; padding: clamp(2rem, 5vh, 3.5rem) 0; display: flex; align-items: center; overflow: hidden; }
     .sf-wrap { width: 100%; max-width: 1320px; margin: 0 auto; padding: 0 clamp(1rem, 4.2vw, 60px); display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.5rem, 4vw, 3.75rem); align-items: center; }
     .sf-left { position: relative; }
     .sf-left .rs-h2 { margin-bottom: 2rem; }
@@ -2763,7 +2763,7 @@
     .free-goodies .fg-head svg { width: 18px; height: 18px; flex: 0 0 18px; color: #E8621A; }
     .free-goodies .fg-body { margin: 0; font-size: .92rem; line-height: 1.6; color: rgba(250,245,238,.85); }
     /* Headings: Archivo Black for a heavier look */
-    h1, h2, h3, h4 { font-family: 'Archivo Black', sans-serif !important; zoom: .7; }
+    h1, h2, h3, h4 { font-family: 'Archivo Black', sans-serif !important; zoom: .7; letter-spacing: -0.02em; }
   </style>
 </head>
 <body>
