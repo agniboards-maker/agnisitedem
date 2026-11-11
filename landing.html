@@ -2481,17 +2481,17 @@
       width: 100%;
       justify-content: center;
       min-height: 56px;
-      background: #E8621A;
+      background: #C9521A;
       color: #FAF5EE;
-      border: 1px solid #E8621A;
-      box-shadow: 0 14px 28px rgba(232,98,26,.3), 0 0 0 4px rgba(232,98,26,.16);
+      border: 1px solid #C9521A;
+      box-shadow: 0 14px 28px rgba(201,82,26,.24), 0 0 0 4px rgba(201,82,26,.12);
       letter-spacing: .1em;
       transition: background-color .2s, box-shadow .2s, transform .2s cubic-bezier(.34,1.56,.64,1);
     }
     .buy-row .mystery-buy:hover {
-      background: #D9561A;
-      border-color: #D9561A;
-      box-shadow: 0 18px 34px rgba(232,98,26,.34), 0 0 0 5px rgba(232,98,26,.22);
+      background: #B5461A;
+      border-color: #B5461A;
+      box-shadow: 0 18px 34px rgba(201,82,26,.28), 0 0 0 5px rgba(201,82,26,.18);
     }
     .buy-row .mystery-buy:focus-visible {
       outline: 2px solid var(--accent);
@@ -2499,8 +2499,8 @@
     }
     .buy-row .mystery-buy:active {
       transform: scale(.98);
-      background: #C44E15;
-      box-shadow: 0 8px 18px rgba(232,98,26,.26);
+      background: #9E3C14;
+      box-shadow: 0 8px 18px rgba(201,82,26,.2);
     }
 
 
@@ -2758,8 +2758,9 @@
     @media (max-width: 768px) { .pv-thumb { width: 62px; height: 78px; flex: 0 0 62px; } }
     @media (max-width: 768px) { .pv-main { height: min(430px, 50vh); } .pv-thumb { width: 52px; height: 66px; flex: 0 0 52px; } }
     /* Free goodies box under the buy button */
-    .free-goodies { margin-top: 1rem; background: #000; color: #FAF5EE; padding: 1.1rem 1.2rem; text-align: center; border-radius: 0; }
-    .free-goodies .fg-head { margin: 0 0 .35rem; font-size: 1.05rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .free-goodies { margin-top: 1rem; background: #000; color: #FAF5EE; padding: 1.1rem 1.2rem; text-align: center; border-radius: 1.2rem; box-shadow: 0 14px 28px rgba(18,12,8,.18); }
+    .free-goodies .fg-head { margin: 0 0 .35rem; font-size: 1.05rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: .5rem; }
+    .free-goodies .fg-head svg { width: 18px; height: 18px; flex: 0 0 18px; }
     .free-goodies .fg-body { margin: 0; font-size: .92rem; line-height: 1.6; color: rgba(250,245,238,.85); }
   </style>
 </head>
@@ -2866,7 +2867,7 @@
               <a href="https://buy.stripe.com/8x2cN7fq1aHI4tsavTgIo01" class="btn btn-line mystery-buy" onclick="event.preventDefault();fbq('track','AddToCart');fbq('track','InitiateCheckout',{value:3200,currency:'THB'});var u=this.href;setTimeout(function(){location.href=u},400)"><span class="buy-label">Buy</span> <span class="buy-price">฿3,200</span> <s class="buy-old">฿3,500</s></a>
             </div>
             <div class="free-goodies" aria-label="Free goodies offer">
-              <p class="fg-head">FREE GOODIES</p>
+              <p class="fg-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>FREE GOODIES</span></p>
               <p class="fg-body">Free Palo Santo incense stick and carry bag for a limited time.</p>
             </div>
             <div class="delivery-box">
