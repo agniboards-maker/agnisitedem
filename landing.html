@@ -2764,18 +2764,15 @@
     .free-goodies .fg-body { margin: 0; font-size: .92rem; line-height: 1.6; color: rgba(250,245,238,.85); }
     /* Phone: pull the product title up so it shows on first screen */
     @media (max-width: 768px) { .product-visual { margin-bottom: 0; min-height: 0; } .pdp-crumbs { margin: 0 0 .2rem; } .product-copy h1 { margin: 0 0 .6rem; } }
-    /* Headings: Archivo Black, all caps (all sizes) */
-    h1, h2, h3, h4 { font-family: 'Archivo Black', sans-serif !important; letter-spacing: -0.02em; text-transform: uppercase; }
-    /* Phone-only spacing, heading size, and product tweaks */
-    @media (max-width: 768px) {
-      h1, h2, h3, h4 { zoom: .7; }
-      .rs-sec, #handmade, .sf-intro, .rv { padding-top: clamp(.5rem, 1.2vw, .9rem) !important; padding-bottom: clamp(.5rem, 1.2vw, .9rem) !important; }
-      #feature-scroll .sf-stick { padding-top: .5rem !important; padding-bottom: .5rem !important; }
-      .product-shell { padding: .75rem 0 .25rem !important; }
-      .product-purchase { background: transparent !important; box-shadow: none !important; border: 0 !important; border-radius: 0 !important; }
-      .delivery-acc summary { font-size: .8rem !important; padding: .45rem .15rem !important; letter-spacing: .06em !important; }
-      .delivery-acc summary span { font-size: .95rem !important; }
-    }
+    /* Headings: Archivo Black, all caps, smaller, tighter (all screens) */
+    h1, h2, h3, h4 { font-family: 'Archivo Black', sans-serif !important; zoom: .7; letter-spacing: -0.02em; text-transform: uppercase; }
+    /* Tighter spacing, product box, accordions (all screens) */
+    .rs-sec, #handmade, .sf-intro, .rv { padding-top: clamp(.5rem, 1.2vw, .9rem) !important; padding-bottom: clamp(.5rem, 1.2vw, .9rem) !important; }
+    #feature-scroll .sf-stick { padding-top: .5rem !important; padding-bottom: .5rem !important; }
+    .product-shell { padding: .75rem 0 .25rem !important; }
+    .product-purchase { background: transparent !important; box-shadow: none !important; border: 0 !important; border-radius: 0 !important; }
+    .delivery-acc summary { font-size: .8rem !important; padding: .45rem .15rem !important; letter-spacing: .06em !important; }
+    .delivery-acc summary span { font-size: .95rem !important; }
     /* Phone: pinned one-photo-at-a-time feature section, like desktop */
     @media (max-width: 768px) {
       .sf-track { height: 260vh !important; }
