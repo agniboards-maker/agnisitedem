@@ -14,11 +14,11 @@
   t.src=v;s=b.getElementsByTagName(e)[0];
   s.parentNode.insertBefore(t,s)}(window, document,'script',
   'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '1485384336398652');
+  fbq('init', '__META_PIXEL_ID__');
   fbq('track', 'PageView');
   </script>
   <noscript><img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=1485384336398652&ev=PageView&noscript=1"
+  src="https://www.facebook.com/tr?id=__META_PIXEL_ID__&ev=PageView&noscript=1"
   /></noscript>
   <!-- End Meta Pixel Code -->
 
@@ -2858,7 +2858,7 @@
             </div>
 
             <div class="buy-row">
-              <a href="https://buy.stripe.com/8x2cN7fq1aHI4tsavTgIo01" class="btn btn-line mystery-buy" onclick="fbq('track','AddToCart')"><span class="buy-label">Buy</span> <span class="buy-price">฿3,200</span> <s class="buy-old">฿3,500</s></a>
+              <a href="https://buy.stripe.com/8x2cN7fq1aHI4tsavTgIo01" class="btn btn-line mystery-buy" onclick="fbq('track','AddToCart');fbq('track','InitiateCheckout',{value:3200,currency:'THB'})"><span class="buy-label">Buy</span> <span class="buy-price">฿3,200</span> <s class="buy-old">฿3,500</s></a>
             </div>
             <div class="delivery-box">
               <div class="delivery-timeline">
