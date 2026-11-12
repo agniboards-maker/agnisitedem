@@ -2881,6 +2881,19 @@
     .rv-photos { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .7rem; }
     .rv-photos img { width: 84px; height: 84px; object-fit: cover; border-radius: 10px; display: block; max-width: 100%; }
     @media (prefers-reduced-motion: reduce) { .rv-backdrop, .rv-box, .rv-star, .rv-submit { transition: none; } }
+    /* Product video: first slide of the photo slider */
+    .pv-main video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: var(--sand); }
+    .pv-main video.pv-slide { transition: transform .55s cubic-bezier(.22,.9,.3,1), opacity .45s ease; will-change: transform, opacity; }
+    .pv-caption, .pv-sound { display: none; }
+    .pv-main.is-video .pv-caption, .pv-main.is-video .pv-sound { display: inline-block; }
+    .pv-caption { position: absolute; left: 14px; bottom: 14px; z-index: 2; padding: .42rem .75rem; border-radius: 9999px; background: rgba(255,255,255,.9); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); box-shadow: 0 6px 16px rgba(28,12,4,.12); pointer-events: none; }
+    .pv-sound { position: absolute; right: 14px; bottom: 14px; z-index: 2; padding: .45rem .85rem; border-radius: 9999px; border: 1px solid rgba(28,12,4,.08); background: rgba(255,255,255,.9); color: var(--text); font: inherit; font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; box-shadow: 0 6px 16px rgba(28,12,4,.12); transition: background-color .2s, color .2s, transform .2s cubic-bezier(.34,1.56,.64,1); }
+    .pv-sound:hover { background: var(--accent); color: #fff; }
+    .pv-sound:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .pv-sound:active { transform: scale(.95); }
+    .pv-sound-on { display: none; }
+    .pv-main.is-sound .pv-sound-on { display: inline; }
+    .pv-main.is-sound .pv-sound-off { display: none; }
   </style>
 </head>
 <body>
@@ -2920,14 +2933,17 @@
       <div class="product-grid">
         <div class="product-visual">
           <div class="pv-main">
-            <img id="pv-main-img" src="product-photos/1.jpg" alt="Agni acupressure board mystery box" />
+            <video id="pv-main-img" class="pv-video" data-src="product-video/623DF969-A7B4-4A0B-96E1-64E0DAC557B3.mp4" poster="product-video/poster.jpg" autoplay muted loop playsinline preload="none" aria-label="Agni board product video"></video>
+            <span class="pv-caption">Packed with care</span>
+            <button type="button" class="pv-sound" aria-label="Sound on or off"><span class="pv-sound-off">Turn sound on</span><span class="pv-sound-on">Mute</span></button>
             <button type="button" class="pv-arrow prev" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
             <button type="button" class="pv-arrow next" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
           </div>
           
           <div class="pv-thumbs" role="group" aria-label="Product photos">
+            <button type="button" class="pv-thumb is-active pv-thumb-video" data-src="product-video/623DF969-A7B4-4A0B-96E1-64E0DAC557B3.mp4" data-type="video" aria-label="Show product video" aria-pressed="true"><img src="product-video/poster.jpg" alt="" /></button>
             <button type="button" class="pv-thumb" data-src="product-photos/10.jpg" aria-label="Show photo 1" aria-pressed="false"><img src="product-photos/10.jpg" alt="" /></button>
-        <button type="button" class="pv-thumb is-active" data-src="product-photos/1.jpg" aria-label="Show photo 2" aria-pressed="true"><img src="product-photos/1.jpg" alt="" /></button>
+        <button type="button" class="pv-thumb" data-src="product-photos/1.jpg" aria-label="Show photo 2" aria-pressed="false"><img src="product-photos/1.jpg" alt="" /></button>
         <button type="button" class="pv-thumb" data-src="product-photos/2.jpg" aria-label="Show photo 3" aria-pressed="false"><img src="product-photos/2.jpg" alt="" /></button>
         <button type="button" class="pv-thumb" data-src="product-photos/8.jpg" aria-label="Show photo 4" aria-pressed="false"><img src="product-photos/8.jpg" alt="" /></button>
         <button type="button" class="pv-thumb" data-src="product-photos/3.jpg" aria-label="Show photo 5" aria-pressed="false"><img src="product-photos/3.jpg" alt="" /></button>
@@ -3370,10 +3386,63 @@
       var next = document.querySelector('.pv-arrow.next');
       if (!frame || !thumbs.length) return;
       var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      var mainNow = frame.querySelector('img');
-      var index = Math.max(0, thumbs.map(function (b) { return b.getAttribute('data-src'); }).indexOf(mainNow ? mainNow.getAttribute('src') : ''));
+      var index = 0; // the product video is the first slide
 
-      function current() { return frame.querySelector('img#pv-main-img'); }
+      function current() { return frame.querySelector('#pv-main-img'); }
+      function isVideo(el) { return !!el && el.tagName === 'VIDEO'; }
+
+      // Builds the next slide: a video for the video thumb, a photo for the rest
+      function makeMedia(i) {
+        var src = thumbs[i].getAttribute('data-src');
+        var el;
+        if (thumbs[i].getAttribute('data-type') === 'video') {
+          el = document.createElement('video');
+          el.muted = true;
+          el.loop = true;
+          el.autoplay = true;
+          el.playsInline = true;
+          el.setAttribute('playsinline', '');
+          el.setAttribute('muted', '');
+          el.preload = 'auto';
+          el.poster = thumbs[i].querySelector('img').getAttribute('src');
+          el.setAttribute('aria-label', 'Agni board product video');
+          el.className = 'pv-slide';
+          el.src = src;
+        } else {
+          el = document.createElement('img');
+          el.className = 'pv-slide';
+          el.src = src;
+        }
+        return el;
+      }
+
+      // The caption and sound button only show while the video is the current slide
+      var sound = frame.querySelector('.pv-sound');
+      function syncOverlay() {
+        var v = current();
+        var on = isVideo(v);
+        var soundOn = on && !v.muted;
+        frame.classList.toggle('is-video', on);
+        frame.classList.toggle('is-sound', soundOn);
+        if (sound) sound.setAttribute('aria-pressed', soundOn ? 'true' : 'false');
+      }
+      if (sound) sound.addEventListener('click', function () {
+        var v = current();
+        if (!isVideo(v)) return;
+        v.muted = !v.muted;
+        if (!v.muted) v.play().catch(function () {});
+        syncOverlay();
+      });
+
+      // The video file loads only after the page has finished loading, so it never slows the rest of the page
+      function startVideo() {
+        var v = current();
+        if (!isVideo(v)) return;
+        if (!v.getAttribute('src')) v.setAttribute('src', v.getAttribute('data-src'));
+        v.play().catch(function () {});
+      }
+      if (document.readyState === 'complete') startVideo();
+      else window.addEventListener('load', startVideo);
 
       // Slide the new photo in from one side while the old one leaves the other side.
       // dir = +1: new photo comes from the right (next). dir = -1: from the left (previous).
@@ -3389,11 +3458,9 @@
           b.setAttribute('aria-pressed', on ? 'true' : 'false');
         });
 
-        var img = document.createElement('img');
-        img.alt = old.alt;
-        img.className = 'pv-slide';
-        img.src = src;
-        if (reduce) { old.remove(); img.id = 'pv-main-img'; frame.appendChild(img); return; }
+        var img = makeMedia(i);
+        if (!isVideo(img) && !isVideo(old)) img.alt = old.alt;
+        if (reduce) { if (isVideo(old)) old.pause(); old.remove(); img.id = 'pv-main-img'; frame.appendChild(img); syncOverlay(); return; }
 
         img.style.transform = 'translateX(' + (dir * 100) + '%)';
         img.style.opacity = '0';
@@ -3412,9 +3479,11 @@
         var done = false;
         function finish() {
           if (done) return; done = true;
+          if (isVideo(old)) old.pause();
           old.remove();
           img.id = 'pv-main-img';
           img.classList.remove('is-entering');
+          syncOverlay();
         }
         img.addEventListener('transitionend', finish, { once: true });
         setTimeout(finish, 800); // safety net
@@ -3436,6 +3505,7 @@
       }
 
       centerThumb(index);
+      syncOverlay();
       thumbs.forEach(function (btn, n) {
         btn.addEventListener('click', function () {
           slideTo(n, n > index ? 1 : -1);
@@ -3566,6 +3636,9 @@
         "Add photos (optional, up to 3)": "เพิ่มรูปภาพ (ไม่บังคับ สูงสุด 3 รูป)",
         "Send review": "ส่งรีวิว",
         "Customer review": "รีวิวจากลูกค้า",
+        "Packed with care": "จัดมาอย่างตั้งใจ",
+        "Turn sound on": "เปิดเสียง",
+        "Mute": "ปิดเสียง",
         "Built to be felt": "ออกแบบมาให้รู้สึกได้",
         "Every board is fitted with custom aluminum nails. They’re light enough to carry around and strong enough to last through daily use. Each nail is set to meet the pressure points under your skin, so the sensation is steady and focused.": "ทุกบอร์ดติดตั้งตะปูอะลูมิเนียมที่ออกแบบพิเศษ น้ำหนักเบาพอให้พกพาได้ และแข็งแรงพอสำหรับการใช้งานทุกวัน ตะปูแต่ละอันถูกจัดให้ตรงกับจุดกดใต้ผิวหนัง ความรู้สึกจึงสม่ำเสมอและเฉพาะเจาะจง",
         "Each board is made from Siberian birch wood. Birch is a dense, smooth hardwood with a clean, light grain, so the surface feels solid under your hands and holds its shape over time. It’s the base that keeps the nails steady and the board ready for daily use.": "แต่ละบอร์ดทำจากไม้เบิร์ชไซบีเรีย ไม้เนื้อแน่นและเรียบ มีลายไม้สะอาดและอ่อนโปร่ง พื้นผิวจึงแข็งแรงเมื่อสัมผัส และคงรูปได้ดีตามกาลเวลา เป็นฐานที่ช่วยให้ตะปูตั้งมั่นและบอร์ดพร้อมใช้งานทุกวัน",
