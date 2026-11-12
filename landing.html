@@ -2527,9 +2527,10 @@
 
 
     /* Pinned, scroll-linked feature section (text left, photo right) */
-    .sf-track { position: relative; height: 200vh; background: #f8f3ee; }
+    .sf-track { position: relative; height: 150vh; background: #f8f3ee; }
     .sf-stick { position: sticky; top: 0; height: auto; min-height: 0; padding: clamp(2rem, 5vh, 3.5rem) 0; display: flex; align-items: center; overflow: hidden; }
     .sf-wrap { width: 100%; max-width: 1320px; margin: 0 auto; padding: 0 clamp(1rem, 4.2vw, 60px); display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.5rem, 4vw, 3.75rem); align-items: center; }
+    .sf-heading { grid-column: 1 / -1; text-align: center; margin: 0; }
     .sf-left { position: relative; }
     .sf-left .rs-h2 { margin-bottom: 2rem; }
     .sf-steps { position: relative; min-height: 190px; }
@@ -2540,7 +2541,7 @@
     .sf-dots { display: flex; gap: .55rem; margin-top: 2rem; }
     .sf-dot { width: 8px; height: 8px; border-radius: 9999px; background: rgba(92,42,16,.22); transition: background-color .3s, transform .3s cubic-bezier(.34,1.56,.64,1); }
     .sf-dot.is-active { background: var(--accent); transform: scale(1.35); }
-    .sf-right { position: relative; aspect-ratio: 4 / 5; max-height: 72vh; width: 100%; justify-self: end; }
+    .sf-right { position: relative; overflow: hidden; aspect-ratio: 4 / 5; max-height: 72vh; width: 100%; justify-self: end; }
     .sf-photo { position: absolute; inset: 0; min-height: 0; opacity: 0; transform: translateX(28px); transition: opacity .55s ease, transform .7s cubic-bezier(.34,1.56,.64,1); pointer-events: none; }
     .sf-photo.is-active { opacity: 1; transform: none; pointer-events: auto; }
     @media (max-width: 768px) {
@@ -2740,7 +2741,7 @@
     .home-link:active { transform: scale(.96); }
     .home-link.is-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
     /* Feature photos: fill the frame */
-    .sf-photo { border-radius: 1.4rem; overflow: hidden; box-shadow: 0 18px 40px rgba(18,12,8,.08); }
+    .sf-photo { border-radius: 10px; overflow: hidden; border: 1px solid rgba(92,42,16,.12); box-shadow: 0 18px 40px rgba(18,12,8,.08); }
     .sf-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .pv-thumbs { scrollbar-width: none; -ms-overflow-style: none; }
     .pv-thumbs::-webkit-scrollbar { display: none; }
@@ -2777,7 +2778,7 @@
     @media (max-width: 768px) { .product-purchase { padding-left: 0 !important; padding-right: 0 !important; } .delivery-acc summary { padding-left: 0 !important; text-align: left; } .delivery-acc p { padding-left: 0 !important; } }
     /* Phone: pinned one-photo-at-a-time feature section, like desktop */
     @media (max-width: 768px) {
-      .sf-track { height: 260vh !important; }
+      .sf-track { height: 200vh !important; }
       .sf-stick { position: sticky !important; top: 96px; height: auto !important; min-height: 0; padding: 0 0 1rem !important; display: flex !important; align-items: flex-start; overflow: hidden; }
       .sf-wrap { grid-template-columns: 1fr !important; gap: 1rem !important; align-content: center; width: 100%; }
       .sf-right { order: -1; display: block !important; aspect-ratio: 4 / 5 !important; max-height: 48vh; width: 74%; max-width: 300px; justify-self: center; }
@@ -2968,17 +2969,11 @@
     </div>
   </section>
 
-  <!-- Section heading: scrolls away before the pinned part starts -->
-  <section class="sf-intro">
-    <div class="rs-wrap rs-center">
-      <h2 class="rs-h2">What makes Agni, Agni?</h2>
-    </div>
-  </section>
-
   <!-- What makes Agni, Agni?: pinned, scroll-linked section (text left, photo right) -->
   <section class="sf-track" id="feature-scroll" aria-label="What makes Agni, Agni?">
     <div class="sf-stick">
       <div class="sf-wrap">
+        <h2 class="rs-h2 sf-heading">What makes Agni, Agni?</h2>
         <div class="sf-left">
           <div class="sf-steps">
               <div class="sf-step is-active" data-index="0">
@@ -3669,14 +3664,44 @@
         dots.forEach(function (el, k) { el.classList.toggle('is-active', k === i); });
       }
 
+      var stick = track.querySelector('.sf-stick');
+      var perStep = 0;
+      var startY = 0;
+      var lead = 0;
+      var GAP = 14; // px of space between photos while they slide
+
+      // Pin the section as soon as it is fully on screen, and size the scroll range to it
+      function layout() {
+        var h = stick.offsetHeight;
+        perStep = Math.max(180, window.innerHeight * 0.4);
+        lead = Math.round(window.innerHeight * 0.08); // a short scroll after pinning before the first change
+        startY = Math.max(0, window.innerHeight - h);
+        track.style.setProperty('height', (h + lead + (steps.length - 1) * perStep) + 'px', 'important');
+        stick.style.setProperty('top', startY + 'px', 'important');
+        photos.forEach(function (el) { el.style.transition = 'none'; });
+        update();
+      }
+
       function update() {
         ticking = false;
         var rect = track.getBoundingClientRect();
-        var scrollable = track.offsetHeight - window.innerHeight;
-        if (scrollable <= 0) return;
-        var progress = Math.min(1, Math.max(0, -rect.top / scrollable));
-        var index = Math.min(steps.length - 1, Math.floor(progress * steps.length));
-        setActive(index);
+        var p = Math.min(steps.length - 1, Math.max(0, (startY - lead - rect.top) / perStep));
+        var idx = Math.min(steps.length - 1, Math.floor(p));
+        var f = p - idx; // 0 to 1 progress toward the next photo
+        setActive(idx);
+        // Photos slide with small scrolls; the text only changes when a photo is fully swapped
+        photos.forEach(function (el, k) {
+          if (k === idx) {
+            el.style.transform = 'translateX(calc(' + (-f * 100) + '% - ' + (f * GAP) + 'px))';
+            el.style.opacity = '1';
+          } else if (k === idx + 1) {
+            el.style.transform = 'translateX(calc(' + ((1 - f) * 100) + '% + ' + ((1 - f) * GAP) + 'px))';
+            el.style.opacity = f > 0 ? '1' : '0';
+          } else {
+            el.style.transform = 'translateX(100%)';
+            el.style.opacity = '0';
+          }
+        });
       }
 
       function onScroll() {
@@ -3684,8 +3709,9 @@
       }
 
       window.addEventListener('scroll', onScroll, { passive: true });
-      window.addEventListener('resize', onScroll);
-      update();
+      window.addEventListener('resize', layout);
+      window.addEventListener('load', layout);
+      layout();
     })();
   </script>
   <script>
