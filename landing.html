@@ -2839,6 +2839,48 @@
       .sticky-buy a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
     }
     @media (prefers-reduced-motion: reduce) { .sticky-buy { transition: none; } }
+    /* Write a review: form, stars, photos */
+    .rv-backdrop { position: fixed; inset: 0; z-index: 215; background: rgba(28,12,4,.45); display: grid; place-items: center; padding: 1rem; opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility .25s ease; }
+    .rv-backdrop.is-open { opacity: 1; visibility: visible; }
+    .rv-box { position: relative; width: min(460px, 100%); max-height: 90vh; overflow-y: auto; background: var(--white); color: var(--text); border-radius: 1.2rem; padding: 1.6rem 1.4rem 1.4rem; box-shadow: 0 30px 80px rgba(28,12,4,.25); border: 1px solid rgba(92,42,16,.08); transform: translateY(10px) scale(.98); transition: transform .3s cubic-bezier(.22,.9,.3,1); }
+    .rv-backdrop.is-open .rv-box { transform: none; }
+    .rv-box h3 { font-family: var(--font-display); font-size: 2rem; line-height: 1; letter-spacing: 1px; font-weight: 400; margin-bottom: 1.1rem; padding-right: 2.5rem; }
+    #rv-form { display: grid; gap: 1rem; }
+    .rv-field { display: grid; gap: .4rem; }
+    .rv-label { font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+    #rv-form input[type="text"], #rv-form textarea { font: inherit; font-size: .95rem; color: var(--text); background: #fff; border: 1px solid rgba(92,42,16,.2); border-radius: .8rem; padding: .65rem .8rem; width: 100%; transition: border-color .2s, box-shadow .2s; }
+    #rv-form textarea { resize: vertical; min-height: 96px; }
+    #rv-form input:focus-visible, #rv-form textarea:focus-visible { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(232,98,26,.18); }
+    .rv-stars-pick { display: flex; gap: .3rem; }
+    .rv-star { font-size: 1.8rem; line-height: 1; border: 0; background: none; color: rgba(92,42,16,.25); cursor: pointer; padding: .1rem; transition: color .15s, transform .2s cubic-bezier(.34,1.56,.64,1); }
+    .rv-star.is-on { color: var(--accent); }
+    .rv-star:hover { transform: scale(1.12); }
+    .rv-star:active { transform: scale(.92); }
+    .rv-star:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+    #rv-photos { font: inherit; font-size: .85rem; max-width: 100%; }
+    #rv-photos:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .rv-previews { display: flex; gap: .6rem; flex-wrap: wrap; }
+    .rv-previews:empty { display: none; }
+    .rv-thumb { position: relative; width: 64px; height: 64px; }
+    .rv-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; display: block; }
+    .rv-thumb-x { position: absolute; top: -6px; right: -6px; width: 22px; height: 22px; border-radius: 9999px; border: 0; background: var(--text); color: #fff; font-size: .7rem; cursor: pointer; }
+    .rv-thumb-x:hover { background: var(--accent); }
+    .rv-thumb-x:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .rv-hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+    .rv-msg { font-size: .9rem; color: var(--text); min-height: 1.2em; margin: 0; }
+    .rv-msg.is-error { color: #b42318; }
+    .rv-submit { padding: .85rem 1.4rem; border-radius: 9999px; border: 0; background: var(--accent); color: #fff; font: inherit; font-size: .85rem; letter-spacing: .04em; cursor: pointer; box-shadow: 0 10px 22px rgba(232,98,26,.25); transition: background-color .2s, transform .2s cubic-bezier(.34,1.56,.64,1); justify-self: start; }
+    .rv-submit:hover { background: var(--accent-warm); }
+    .rv-submit:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .rv-submit:active { transform: scale(.97); }
+    .rv-submit:disabled { opacity: .6; cursor: default; }
+    .rv-close { position: absolute; top: 1rem; right: 1rem; width: 36px; height: 36px; border-radius: 9999px; border: 0; background: rgba(92,42,16,.08); color: var(--text); cursor: pointer; transition: background-color .2s, transform .2s cubic-bezier(.34,1.56,.64,1); }
+    .rv-close:hover { background: rgba(92,42,16,.16); }
+    .rv-close:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .rv-close:active { transform: scale(.94); }
+    .rv-photos { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .7rem; }
+    .rv-photos img { width: 84px; height: 84px; object-fit: cover; border-radius: 10px; display: block; max-width: 100%; }
+    @media (prefers-reduced-motion: reduce) { .rv-backdrop, .rv-box, .rv-star, .rv-submit { transition: none; } }
   </style>
 </head>
 <body>
@@ -3101,9 +3143,9 @@
             <span class="rv-based">Based on 312 customers</span>
           </div>
         </div>
-        <button type="button" class="rv-write">Write a review</button>
+        <button type="button" class="rv-write" id="rv-write">Write a review</button>
       </div>
-      <div class="rv-list">
+      <div class="rv-list" id="rv-list">
       <article class="rv-item">
         <div class="rv-by"><span class="rv-name">Cat owner, review later</span><span class="rv-verified">Verified Customer</span></div>
         <div class="rv-stars" aria-label="5 out of 5 stars">★★★★★</div>
@@ -3518,6 +3560,12 @@
         "We stand behind our product. If there is a manufacturing defect or damage on our end, we will accept returns within 30 days of purchase. Contact us via Instagram DM at @agniboards.th with your order details and a photo of the issue. Returns due to change of mind are not accepted.": "เรารับผิดชอบต่อสินค้าของเรา หากพบข้อบกพร่องจากการผลิตหรือความเสียหายที่เกิดจากเรา เรารับคืนสินค้าภายใน 30 วันหลังการซื้อ กรุณาติดต่อเราทาง Instagram DM ที่ @agniboards.th พร้อมรายละเอียดคำสั่งซื้อและรูปปัญหาที่พบ ไม่รับคืนสินค้ากรณีเปลี่ยนใจ",
         "What makes Agni, Agni?": "อะไรทำให้ Agni เป็น Agni?",
         "Buy now": "ซื้อเลย",
+        "Your rating": "ให้คะแนนของคุณ",
+        "Your nickname (optional)": "ชื่อเล่นของคุณ (ไม่บังคับ)",
+        "Your review": "รีวิวของคุณ",
+        "Add photos (optional, up to 3)": "เพิ่มรูปภาพ (ไม่บังคับ สูงสุด 3 รูป)",
+        "Send review": "ส่งรีวิว",
+        "Customer review": "รีวิวจากลูกค้า",
         "Built to be felt": "ออกแบบมาให้รู้สึกได้",
         "Every board is fitted with custom aluminum nails. They’re light enough to carry around and strong enough to last through daily use. Each nail is set to meet the pressure points under your skin, so the sensation is steady and focused.": "ทุกบอร์ดติดตั้งตะปูอะลูมิเนียมที่ออกแบบพิเศษ น้ำหนักเบาพอให้พกพาได้ และแข็งแรงพอสำหรับการใช้งานทุกวัน ตะปูแต่ละอันถูกจัดให้ตรงกับจุดกดใต้ผิวหนัง ความรู้สึกจึงสม่ำเสมอและเฉพาะเจาะจง",
         "Each board is made from Siberian birch wood. Birch is a dense, smooth hardwood with a clean, light grain, so the surface feels solid under your hands and holds its shape over time. It’s the base that keeps the nails steady and the board ready for daily use.": "แต่ละบอร์ดทำจากไม้เบิร์ชไซบีเรีย ไม้เนื้อแน่นและเรียบ มีลายไม้สะอาดและอ่อนโปร่ง พื้นผิวจึงแข็งแรงเมื่อสัมผัส และคงรูปได้ดีตามกาลเวลา เป็นฐานที่ช่วยให้ตะปูตั้งมั่นและบอร์ดพร้อมใช้งานทุกวัน",
@@ -3817,6 +3865,280 @@
     })();
   </script>
 <script>(function(){function u(){document.body.classList.toggle('is-scrolled', window.scrollY > 40);}window.addEventListener('scroll',u,{passive:true});u();})();</script>
+  <!-- Write a review form -->
+  <div class="rv-backdrop" id="review-box" aria-hidden="true">
+    <div class="rv-box" role="dialog" aria-modal="true" aria-labelledby="rv-form-title">
+      <button type="button" class="rv-close" id="rv-close" aria-label="Close review form">&#x2715;</button>
+      <h3 id="rv-form-title">Write a review</h3>
+      <form id="rv-form" novalidate>
+        <div class="rv-field">
+          <span class="rv-label">Your rating</span>
+          <div class="rv-stars-pick" role="group" aria-label="Your rating">
+            <button type="button" class="rv-star" data-value="1" aria-label="1 star">★</button>
+            <button type="button" class="rv-star" data-value="2" aria-label="2 stars">★</button>
+            <button type="button" class="rv-star" data-value="3" aria-label="3 stars">★</button>
+            <button type="button" class="rv-star" data-value="4" aria-label="4 stars">★</button>
+            <button type="button" class="rv-star" data-value="5" aria-label="5 stars">★</button>
+          </div>
+        </div>
+        <label class="rv-field">
+          <span class="rv-label">Your nickname (optional)</span>
+          <input type="text" id="rv-nick" maxlength="40" autocomplete="nickname">
+        </label>
+        <label class="rv-field">
+          <span class="rv-label">Your review</span>
+          <textarea id="rv-body" rows="4" maxlength="600"></textarea>
+        </label>
+        <div class="rv-field">
+          <span class="rv-label">Add photos (optional, up to 3)</span>
+          <input type="file" id="rv-photos" accept="image/*" multiple>
+          <div class="rv-previews" id="rv-previews"></div>
+        </div>
+        <input type="text" id="rv-hp" class="rv-hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <p class="rv-msg" id="rv-msg" role="status" aria-live="polite"></p>
+        <button type="submit" class="rv-submit" id="rv-submit">Send review</button>
+      </form>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+  <script>
+    (function () {
+      // From Supabase: Project Settings > API. The anon key is meant to be public; the database rules protect the data.
+      var SUPABASE_URL = 'https://rtpdnarhzjvomlyygiek.supabase.co';
+      var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0cGRuYXJoemp2b21seXlnaWVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ0NjY3NDcsImV4cCI6MjExMDA0Mjc0N30.f-D1msdSZ1tUBbWPOlYQBCzesAzwZbwmm4RCmF6zcXk';
+      var BUCKET = 'review-photos';
+      var MAX_PHOTOS = 3;
+
+      var openBtn = document.getElementById('rv-write');
+      var box = document.getElementById('review-box');
+      var form = document.getElementById('rv-form');
+      var closeBtn = document.getElementById('rv-close');
+      var nick = document.getElementById('rv-nick');
+      var body = document.getElementById('rv-body');
+      var photoInput = document.getElementById('rv-photos');
+      var previews = document.getElementById('rv-previews');
+      var hp = document.getElementById('rv-hp');
+      var msg = document.getElementById('rv-msg');
+      var submitBtn = document.getElementById('rv-submit');
+      var list = document.getElementById('rv-list');
+      if (!openBtn || !box || !form || !list) return;
+
+      var starBtns = Array.prototype.slice.call(box.querySelectorAll('.rv-star'));
+      var stars = 0;
+      var files = [];
+
+      var MSG = {
+        en: {
+          need_stars: 'Please tap a star rating.',
+          need_text: 'Please write a few words about your board.',
+          too_many: 'You can add up to 3 photos.',
+          sending: 'Sending…',
+          thanks: 'Thank you! Your review will appear once we have checked it.',
+          error: 'Something went wrong. Please try again.',
+          setup: 'Reviews are not connected yet.',
+          remove: 'Remove photo'
+        },
+        th: {
+          need_stars: 'กรุณาให้คะแนนดาวก่อนนะคะ',
+          need_text: 'กรุณาเขียนความเห็นสั้นๆ เกี่ยวกับบอร์ดก่อนนะคะ',
+          too_many: 'เพิ่มรูปได้สูงสุด 3 รูปค่ะ',
+          sending: 'กำลังส่ง…',
+          thanks: 'ขอบคุณค่ะ! รีวิวของคุณจะขึ้นหลังจากเราตรวจสอบแล้วค่ะ',
+          error: 'เกิดข้อผิดพลาด กรุณาลองอีกครั้งค่ะ',
+          setup: 'ระบบรีวิวยังไม่ได้เชื่อมต่อค่ะ',
+          remove: 'ลบรูป'
+        }
+      };
+      function t(key) { return (document.documentElement.lang === 'th' ? MSG.th : MSG.en)[key]; }
+      function say(text, isError) { msg.textContent = text || ''; msg.classList.toggle('is-error', !!isError); }
+
+      var client = null;
+      function getClient() {
+        if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !window.supabase) return null;
+        if (!client) client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        return client;
+      }
+
+      function openBox() {
+        say('');
+        box.classList.add('is-open');
+        box.setAttribute('aria-hidden', 'false');
+        nick.focus();
+      }
+      function closeBox() {
+        box.classList.remove('is-open');
+        box.setAttribute('aria-hidden', 'true');
+        openBtn.focus();
+      }
+      openBtn.addEventListener('click', openBox);
+      closeBtn.addEventListener('click', closeBox);
+      box.addEventListener('click', function (e) { if (e.target === box) closeBox(); });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && box.classList.contains('is-open')) closeBox();
+      });
+
+      function paintStars() {
+        starBtns.forEach(function (b) {
+          var on = Number(b.dataset.value) <= stars;
+          b.classList.toggle('is-on', on);
+          b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+      }
+      starBtns.forEach(function (b) {
+        b.addEventListener('click', function () { stars = Number(b.dataset.value); paintStars(); });
+      });
+
+      function renderPreviews() {
+        previews.innerHTML = '';
+        files.forEach(function (f, i) {
+          var wrap = document.createElement('div');
+          wrap.className = 'rv-thumb';
+          var img = document.createElement('img');
+          img.alt = '';
+          img.src = URL.createObjectURL(f);
+          var rm = document.createElement('button');
+          rm.type = 'button';
+          rm.className = 'rv-thumb-x';
+          rm.setAttribute('aria-label', t('remove'));
+          rm.textContent = '✕';
+          rm.addEventListener('click', function () { files.splice(i, 1); renderPreviews(); });
+          wrap.appendChild(img);
+          wrap.appendChild(rm);
+          previews.appendChild(wrap);
+        });
+      }
+      photoInput.addEventListener('change', function () {
+        var picked = Array.prototype.slice.call(photoInput.files);
+        photoInput.value = '';
+        if (files.length + picked.length > MAX_PHOTOS) say(t('too_many'), true);
+        files = files.concat(picked).slice(0, MAX_PHOTOS);
+        renderPreviews();
+      });
+
+      // Resize photos in the browser before upload (keeps uploads small)
+      function shrink(file) {
+        return new Promise(function (resolve, reject) {
+          var url = URL.createObjectURL(file);
+          var img = new Image();
+          img.onload = function () {
+            var w = img.naturalWidth, h = img.naturalHeight;
+            var s = Math.min(1, 1200 / Math.max(w, h));
+            var c = document.createElement('canvas');
+            c.width = Math.round(w * s);
+            c.height = Math.round(h * s);
+            c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+            URL.revokeObjectURL(url);
+            c.toBlob(function (blob) { if (blob) resolve(blob); else reject(new Error('encode')); }, 'image/jpeg', 0.82);
+          };
+          img.onerror = function () { URL.revokeObjectURL(url); reject(new Error('decode')); };
+          img.src = url;
+        });
+      }
+
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        if (hp.value) return; // hidden field filled in: almost certainly a bot
+        var text = body.value.trim();
+        if (!stars) { say(t('need_stars'), true); return; }
+        if (!text) { say(t('need_text'), true); return; }
+        var c = getClient();
+        if (!c) { say(t('setup'), true); return; }
+
+        submitBtn.disabled = true;
+        say(t('sending'));
+        try {
+          var paths = [];
+          for (var i = 0; i < files.length; i++) {
+            var blob = await shrink(files[i]);
+            var path = (window.crypto && crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + i) + '.jpg';
+            var up = await c.storage.from(BUCKET).upload(path, blob, { contentType: 'image/jpeg', cacheControl: '3600' });
+            if (up.error) throw up.error;
+            paths.push(path);
+          }
+          var ins = await c.from('reviews').insert({
+            nickname: nick.value.trim().slice(0, 40) || 'Customer',
+            stars: stars,
+            body: text.slice(0, 600),
+            photo_paths: paths
+          });
+          if (ins.error) throw ins.error;
+          form.reset();
+          stars = 0;
+          paintStars();
+          files = [];
+          renderPreviews();
+          say(t('thanks'));
+          setTimeout(closeBox, 2400);
+        } catch (err) {
+          say(t('error'), true);
+        } finally {
+          submitBtn.disabled = false;
+        }
+      });
+
+      // Approved reviews from the database appear at the top of the list
+      function formatDate(iso) {
+        var d = new Date(iso);
+        return d.getDate() + ' ' + d.toLocaleString('en-GB', { month: 'short' }) + ' ' + d.getFullYear();
+      }
+      function buildItem(row, c) {
+        var art = document.createElement('article');
+        art.className = 'rv-item';
+        var by = document.createElement('div');
+        by.className = 'rv-by';
+        var name = document.createElement('span');
+        name.className = 'rv-name';
+        name.textContent = row.nickname;
+        var tag = document.createElement('span');
+        tag.className = 'rv-verified';
+        tag.textContent = 'Customer review';
+        by.appendChild(name);
+        by.appendChild(tag);
+        var st = document.createElement('div');
+        st.className = 'rv-stars';
+        st.setAttribute('aria-label', row.stars + ' out of 5 stars');
+        st.textContent = '★'.repeat(row.stars) + '☆'.repeat(5 - row.stars);
+        var p = document.createElement('p');
+        p.className = 'rv-text';
+        p.textContent = row.body;
+        art.appendChild(by);
+        art.appendChild(st);
+        art.appendChild(p);
+        if (row.photo_paths && row.photo_paths.length) {
+          var ph = document.createElement('div');
+          ph.className = 'rv-photos';
+          row.photo_paths.forEach(function (path) {
+            var img = document.createElement('img');
+            img.loading = 'lazy';
+            img.alt = 'Photo from a customer review';
+            img.src = c.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
+            ph.appendChild(img);
+          });
+          art.appendChild(ph);
+        }
+        var d = document.createElement('p');
+        d.className = 'rv-loc';
+        d.textContent = formatDate(row.created_at);
+        art.appendChild(d);
+        return art;
+      }
+
+      var reader = getClient();
+      if (reader) {
+        reader.from('reviews')
+          .select('nickname,stars,body,photo_paths,created_at')
+          .eq('approved', true)
+          .order('created_at', { ascending: false })
+          .limit(50)
+          .then(function (r) {
+            if (r.error || !r.data || !r.data.length) return;
+            var frag = document.createDocumentFragment();
+            r.data.forEach(function (row) { frag.appendChild(buildItem(row, reader)); });
+            list.insertBefore(frag, list.firstChild);
+          });
+      }
+    })();
+  </script>
   <!-- Mobile sticky buy bar: appears after the BUY button has scrolled past -->
   <div class="sticky-buy" id="sticky-buy" aria-hidden="true">
     <a href="#" id="sticky-buy-link" tabindex="-1"><span>Buy now</span></a>
