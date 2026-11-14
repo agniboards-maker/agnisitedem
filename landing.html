@@ -2956,6 +2956,22 @@
     .line-chat:active { scale: .94; }
     @media (max-width: 768px) { .line-chat { right: 16px; bottom: 16px; } }
     @media (prefers-reduced-motion: reduce) { .line-chat { transition: opacity .3s ease; transform: none; } }
+    /* Quantity pills (1 / 3 / 5): a secondary choice, smaller than the level boxes */
+    .qty-wrap { margin: .6rem 0 .3rem; }
+    .qty-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: .45rem; }
+    .qty-pill { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .05rem; min-height: 50px; padding: .35rem .2rem; border: 1px solid rgba(92,42,16,.14); border-radius: 10px; background: transparent; color: var(--text); font-family: var(--font-body); cursor: pointer; }
+    .qty-pill .qty-n { font-weight: 600; font-size: .85rem; }
+    .qty-pill .qty-p { font-size: .75rem; opacity: .85; }
+    .qty-pill .qty-save { font-size: .62rem; min-height: .9em; color: var(--accent); white-space: nowrap; }
+    .qty-pill:hover { border-color: rgba(92,42,16,.32); }
+    .qty-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .qty-pill:active { transform: scale(.97); }
+    .qty-pill.selected { border-color: var(--accent); background: rgba(232,98,26,.08); }
+    .qty-mix { margin: .5rem 0 0; font-size: .78rem; text-align: center; color: var(--muted); }
+    .qty-mix a { color: var(--text); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+    .qty-mix a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+    html:not([lang="th"]) .lang-th { display: none; }
+    html[lang="th"] .lang-en { display: none; }
   </style>
 </head>
 <body>
@@ -3067,8 +3083,17 @@
               </button>
             </div>
 
+            <div class="qty-wrap">
+              <div class="qty-row" role="radiogroup" aria-label="Quantity">
+                <button type="button" class="qty-pill selected" role="radio" aria-checked="true" data-qty="1"><span class="qty-n">1×</span><span class="qty-p">฿3,200</span><span class="qty-save"></span></button>
+                <button type="button" class="qty-pill" role="radio" aria-checked="false" data-qty="3"><span class="qty-n">3×</span><span class="qty-p">฿8,500</span><span class="qty-save"></span></button>
+                <button type="button" class="qty-pill" role="radio" aria-checked="false" data-qty="5"><span class="qty-n">5×</span><span class="qty-p">฿13,000</span><span class="qty-save"></span></button>
+              </div>
+              <p class="qty-mix"><span class="lang-th">อยากคละ Level? </span><span class="lang-en">Want to mix levels? </span><a href="https://lin.ee/7EaQ1ZU" target="_blank" rel="noopener"><span class="lang-th">ทักไลน์ได้เลย 💬</span><span class="lang-en">Chat on LINE 💬</span></a></p>
+            </div>
+
             <div class="buy-row">
-              <a href="https://buy.stripe.com/8x2cN7fq1aHI4tsavTgIo01" class="btn btn-line mystery-buy" onclick="event.preventDefault();fbq('track','AddToCart');fbq('track','InitiateCheckout',{value:3200,currency:'THB'});var u=this.href;setTimeout(function(){location.href=u},400)"><span class="buy-label">Buy</span> <span class="buy-price">฿3,200</span> <s class="buy-old">฿3,800</s></a>
+              <a href="https://buy.stripe.com/8x2cN7fq1aHI4tsavTgIo01" class="btn btn-line mystery-buy" id="mystery-buy"><span class="buy-text">Buy Level 1 × 1 — ฿3,200</span></a>
             </div>
             <div class="free-goodies" aria-label="Free goodies offer">
               <p class="fg-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>BLACK FRIDAY SPECIAL</span></p>
@@ -3438,16 +3463,67 @@
 
     const mysteryButtons = document.querySelectorAll('.level-option');
     const mysteryBuy = document.querySelector('.mystery-buy');
+    const qtyPills = document.querySelectorAll('.qty-pill');
+    // Level + quantity choice. Each combination has its own Stripe link.
+    const bundle = {
+      links: {
+        1: { 1: 'https://buy.stripe.com/8x2cN7fq1aHI4tsavTgIo01', 3: 'https://buy.stripe.com/28E5kFelX4jk7FEavTgIo04', 5: 'https://buy.stripe.com/28EbJ36TvbLMcZYcE1gIo05' },
+        2: { 1: 'https://buy.stripe.com/8x29AVfq12bc1hg33rgIo03', 3: 'https://buy.stripe.com/aFa4gBa5H4jk1hgdI5gIo06', 5: 'https://buy.stripe.com/7sY7sNelX6rs6BAgUhgIo07' }
+      },
+      total: { 1: 3200, 3: 8500, 5: 13000 },
+      save: { 3: 1100, 5: 3000 },
+      level: 1,
+      qty: 1
+    };
+    function isThai() { return document.documentElement.lang === 'th'; }
+    function baht(n) { return '฿' + n.toLocaleString('en-US'); }
+    function renderBundle() {
+      const th = isThai();
+      qtyPills.forEach((p) => {
+        const q = Number(p.dataset.qty);
+        const on = q === bundle.qty;
+        p.classList.toggle('selected', on);
+        p.setAttribute('aria-checked', on ? 'true' : 'false');
+        p.querySelector('.qty-p').textContent = baht(bundle.total[q]);
+        p.querySelector('.qty-save').textContent = bundle.save[q]
+          ? (th ? 'ประหยัด ' : 'Save ') + baht(bundle.save[q]) + (q === 5 ? ' 🎁' : '')
+          : '';
+      });
+      const label = (th ? 'สั่งซื้อ' : 'Buy') + ' Level ' + bundle.level + ' × ' + bundle.qty + ' — ' + baht(bundle.total[bundle.qty]);
+      mysteryBuy.querySelector('.buy-text').textContent = label;
+      mysteryBuy.setAttribute('href', bundle.links[bundle.level][bundle.qty]);
+      const sticky = document.querySelector('#sticky-buy-link span');
+      if (sticky) sticky.textContent = label;
+    }
+    // Buy (main button and sticky bar): track the chosen bundle, remember it for the thank-you page, then go to Stripe
+    function checkout(e, el) {
+      e.preventDefault();
+      const total = bundle.total[bundle.qty];
+      if (typeof fbq === 'function') {
+        fbq('track', 'AddToCart', { value: total, currency: 'THB', content_name: 'Level ' + bundle.level, num_items: bundle.qty });
+        fbq('track', 'InitiateCheckout', { value: total, currency: 'THB', num_items: bundle.qty });
+      }
+      try { sessionStorage.setItem('agniOrder', JSON.stringify({ value: total, qty: bundle.qty, level: bundle.level })); } catch (err) {}
+      const u = el.getAttribute('href');
+      setTimeout(function () { location.href = u; }, 400);
+    }
+    window.agniCheckout = checkout;
+    mysteryBuy.addEventListener('click', function (e) { checkout(e, mysteryBuy); });
 
     mysteryButtons.forEach((button) => {
       button.addEventListener('click', () => {
         mysteryButtons.forEach((btn) => btn.classList.remove('selected'));
-        if (mysteryBuy && button.dataset.link) mysteryBuy.setAttribute('href', button.dataset.link);
         button.classList.add('selected');
-        const label = button.dataset.cta || 'Choose level';
-        // Price stays the same for both levels, so the button text is left as is.
+        bundle.level = button.dataset.level === 'hard' ? 2 : 1;
+        renderBundle();
       });
     });
+    qtyPills.forEach((p) => {
+      p.addEventListener('click', () => { bundle.qty = Number(p.dataset.qty); renderBundle(); });
+    });
+    // Labels follow the EN / TH toggle
+    new MutationObserver(renderBundle).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+    renderBundle();
 
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLegal(); });
 
@@ -4392,13 +4468,7 @@
 
       // Same tracking and short delay as the BUY button
       link.addEventListener('click', function (e) {
-        e.preventDefault();
-        if (typeof fbq === 'function') {
-          fbq('track', 'AddToCart');
-          fbq('track', 'InitiateCheckout', { value: 3200, currency: 'THB' });
-        }
-        var u = link.href;
-        setTimeout(function () { location.href = u; }, 400);
+        if (window.agniCheckout) window.agniCheckout(e, link);
       });
       sync();
     })();

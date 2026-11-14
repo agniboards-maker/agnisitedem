@@ -4,6 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Test payment complete · Agni Boards</title>
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '__META_PIXEL_ID__');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=__META_PIXEL_ID__&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
   <style>
     body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #FAF5EE; color: #5C2A10; font-family: 'DM Sans', system-ui, sans-serif; padding: 2rem 1rem; }
     main { max-width: 480px; text-align: center; }
@@ -30,6 +47,18 @@
     <p id="session" hidden>Session: <code></code></p>
     <p><a href="/">Back to the main page</a></p>
   </main>
+  <script>
+    // Purchase: the value and quantity of the bundle the buyer chose on the landing page (saved in this tab before checkout)
+    (function () {
+      var order = null;
+      try { order = JSON.parse(sessionStorage.getItem('agniOrder') || 'null'); } catch (e) {}
+      if (!order) return;
+      sessionStorage.removeItem('agniOrder'); // fire once, even if the page is reloaded
+      if (typeof fbq === 'function') {
+        fbq('track', 'Purchase', { value: order.value, currency: 'THB', num_items: order.qty });
+      }
+    })();
+  </script>
   <script>
     // Show the Checkout Session ID that Stripe put in the URL (test data only)
     var id = new URLSearchParams(window.location.search).get('session_id');
