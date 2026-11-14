@@ -443,6 +443,15 @@
     #announcement .ann-item { display: inline-flex; align-items: center; gap: .55rem; padding: 0 1.4rem; }
     #announcement .ann-icon { display: inline-grid; place-items: center; width: 22px; height: 22px; flex-shrink: 0; }
     #announcement .ann-icon svg { width: 20px; height: 20px; }
+      /* LINE chat button: bottom-right on every page, fades in after 3 seconds */
+    .line-chat { position: fixed; right: 20px; bottom: 20px; z-index: 140; width: 52px; height: 52px; border-radius: 9999px; background: #06C755; display: grid; place-items: center; text-decoration: none; box-shadow: 0 14px 24px -10px rgba(6,199,85,.6), 0 6px 14px -6px rgba(18,12,8,.28); opacity: 0; transform: translateY(8px); pointer-events: none; transition: opacity .6s ease, transform .6s cubic-bezier(.34,1.56,.64,1), translate .35s cubic-bezier(.22,.9,.3,1), box-shadow .25s ease, filter .25s ease, scale .15s ease; }
+    .line-chat.is-shown { opacity: 1; transform: none; pointer-events: auto; }
+    .line-chat svg { width: 30px; height: 30px; display: block; }
+    .line-chat:hover { filter: brightness(1.05); box-shadow: 0 18px 30px -10px rgba(6,199,85,.7), 0 8px 18px -6px rgba(18,12,8,.3); }
+    .line-chat:focus-visible { outline: 2px solid #E8621A; outline-offset: 3px; }
+    .line-chat:active { scale: .94; }
+    @media (max-width: 768px) { .line-chat { right: 16px; bottom: 16px; } }
+    @media (prefers-reduced-motion: reduce) { .line-chat { transition: opacity .3s ease; transform: none; } }
   </style>
 </head>
 <body>
@@ -562,6 +571,40 @@
     }
 
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLegal(); });
+  </script>
+  <a href="https://lin.ee/7EaQ1ZU" class="line-chat" id="line-chat" target="_blank" rel="noopener" aria-label="Chat with us on LINE">
+    <svg viewBox="0 0 52 52" aria-hidden="true" focusable="false">
+      <ellipse cx="26" cy="23" rx="18.5" ry="15.5" fill="#FFFFFF"/>
+      <path d="M15 34.5 L10.5 43 L22.5 37.5 Z" fill="#FFFFFF"/>
+      <text x="26" y="27.5" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="11" letter-spacing="0.4" fill="#06C755">LINE</text>
+    </svg>
+  </a>
+  <script>
+    (function () {
+      var btn = document.getElementById('line-chat');
+      if (!btn) return;
+      // Fade in about 3 seconds after the page loads
+      setTimeout(function () { btn.classList.add('is-shown'); }, 3000);
+      // Meta Pixel: a tap counts as a Contact
+      btn.addEventListener('click', function () {
+        if (typeof fbq === 'function') fbq('track', 'Contact');
+      });
+      // On phones, sit just above the sticky buy bar while it is showing
+      var bar = document.getElementById('sticky-buy');
+      function placeAboveBar() {
+        var shift = 0;
+        if (bar && bar.classList.contains('is-visible') && getComputedStyle(bar).display !== 'none') {
+          var bottom = parseFloat(getComputedStyle(btn).bottom) || 0;
+          shift = bar.offsetHeight + 12 - bottom;
+        }
+        btn.style.translate = shift > 0 ? '0 -' + shift + 'px' : '';
+      }
+      if (bar && window.MutationObserver) {
+        new MutationObserver(placeAboveBar).observe(bar, { attributes: true, attributeFilter: ['class'] });
+      }
+      window.addEventListener('resize', placeAboveBar);
+      placeAboveBar();
+    })();
   </script>
 </body>
 </html>
