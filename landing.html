@@ -3463,7 +3463,9 @@
       var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       var index = 0; // the product video is the first slide
 
-      function current() { return frame.querySelector('#pv-main-img'); }
+      // The slide on screen. Tracked in a variable, because the id moves while a slide animates.
+      var shown = frame.querySelector('#pv-main-img');
+      function current() { return shown; }
       function isVideo(el) { return !!el && el.tagName === 'VIDEO'; }
 
       // Builds the next slide: a video for the video thumb, a photo for the rest
@@ -3535,13 +3537,14 @@
 
         var img = makeMedia(i);
         if (!isVideo(img) && !isVideo(old)) img.alt = old.alt;
-        if (reduce) { if (isVideo(old)) old.pause(); old.remove(); img.id = 'pv-main-img'; frame.appendChild(img); syncOverlay(); return; }
+        if (reduce) { if (isVideo(old)) old.pause(); old.remove(); img.id = 'pv-main-img'; frame.appendChild(img); shown = img; syncOverlay(); return; }
 
         // Wait until the photo is decoded, so the slide never shows an empty frame
         function run() {
         img.style.transform = 'translateX(' + (dir * 100) + '%)';
         img.style.opacity = '0';
         frame.appendChild(img);
+        shown = img;
         // Returning to the video: start it again from the beginning (Safari needs an explicit play call)
         if (isVideo(img)) { img.currentTime = 0; img.play().catch(function () {}); }
         old.id = '';
