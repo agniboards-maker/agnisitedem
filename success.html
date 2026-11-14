@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Test payment complete · Agni Boards</title>
+  <title>Thank you for your purchase · Agni Boards</title>
   <!-- Meta Pixel Code -->
   <script>
   !function(f,b,e,v,n,t,s)
@@ -42,9 +42,8 @@
 </head>
 <body>
   <main>
-    <h1>Test payment complete</h1>
-    <p>This was a Stripe test-mode payment. No real money was charged.</p>
-    <p id="session" hidden>Session: <code></code></p>
+    <h1>Thank you for your purchase</h1>
+    <p>We'll get in touch with you very soon regarding the delivery of your order.</p>
     <p><a href="/">Back to the main page</a></p>
   </main>
   <script>
@@ -58,15 +57,6 @@
         fbq('track', 'Purchase', { value: order.value, currency: 'THB', num_items: order.qty });
       }
     })();
-  </script>
-  <script>
-    // Show the Checkout Session ID that Stripe put in the URL (test data only)
-    var id = new URLSearchParams(window.location.search).get('session_id');
-    if (id) {
-      var el = document.getElementById('session');
-      el.querySelector('code').textContent = id;
-      el.hidden = false;
-    }
   </script>
   <a href="https://lin.ee/7EaQ1ZU" class="line-chat" id="line-chat" target="_blank" rel="noopener" aria-label="Chat with us on LINE">
     <svg viewBox="0 0 52 52" aria-hidden="true" focusable="false">

@@ -3051,7 +3051,6 @@
             <div class="product-price-row">
               <div class="price-stack">
                 <span class="price-amount">฿3,200</span>
-                <span class="price-old">฿3,800</span>
               </div>
             </div>
             <p class="lead">The Agni board is for the days when you’re tired, sore, or just wound up. Stand on it, and the nails start to work on the tension you’ve been carrying around.</p>
@@ -3486,7 +3485,7 @@
         p.setAttribute('aria-checked', on ? 'true' : 'false');
         p.querySelector('.qty-p').textContent = baht(bundle.total[q]);
         p.querySelector('.qty-save').textContent = bundle.save[q]
-          ? (th ? 'ประหยัด ' : 'Save ') + baht(bundle.save[q]) + (q === 5 ? ' 🎁' : '')
+          ? (th ? 'ประหยัด ' : 'Save ') + baht(bundle.save[q])
           : '';
       });
       const label = (th ? 'สั่งซื้อ' : 'Buy') + ' Level ' + bundle.level + ' × ' + bundle.qty + ' — ' + baht(bundle.total[bundle.qty]);
