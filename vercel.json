@@ -1,5 +1,4 @@
 {
   "cleanUrls": true,
-  "buildCommand": "node scripts/inject-meta-pixel.mjs",
-  "outputDirectory": "."
+  "buildCommand": "node scripts/inject-meta-pixel.mjs"
 }
