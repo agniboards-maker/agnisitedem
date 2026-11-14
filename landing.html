@@ -3506,6 +3506,8 @@
         img.style.transform = 'translateX(' + (dir * 100) + '%)';
         img.style.opacity = '0';
         frame.appendChild(img);
+        // Returning to the video: start it again from the beginning (Safari needs an explicit play call)
+        if (isVideo(img)) { img.currentTime = 0; img.play().catch(function () {}); }
         old.id = '';
         old.classList.add('pv-slide');
         // Let the browser apply the start position before animating
