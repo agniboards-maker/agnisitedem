@@ -4400,16 +4400,26 @@
   <script>
     // Tapping a customer video swaps the poster for the playing video
     document.addEventListener('click', function (e) {
+      // First tap: swap the poster for the video and play it with sound (inside the tap, so phones allow sound)
       var btn = e.target.closest('.rv-video');
-      if (!btn) return;
-      var v = document.createElement('video');
-      v.className = 'rv-video-el';
-      v.src = 'review-photos/review-video.mp4';
-      v.controls = true;
-      v.autoplay = true;
-      v.playsInline = true;
-      btn.replaceWith(v);
-      v.play().catch(function () {});
+      if (btn) {
+        var v = document.createElement('video');
+        v.className = 'rv-video-el';
+        v.src = 'review-photos/review-video.mp4';
+        v.poster = 'review-photos/review-video-poster.jpg';
+        v.playsInline = true;
+        v.preload = 'auto';
+        v.muted = false;
+        v.volume = 1;
+        btn.replaceWith(v);
+        v.play().catch(function () {});
+        return;
+      }
+      // Later taps: pause or play, no player controls
+      var playing = e.target.closest('.rv-video-el');
+      if (!playing) return;
+      if (playing.paused) playing.play().catch(function () {});
+      else playing.pause();
     });
   </script>
   <div class="rv-lb" id="rv-lb" aria-hidden="true" role="dialog" aria-label="Customer photo">
