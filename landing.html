@@ -2912,6 +2912,17 @@
       font-weight: 400;
       letter-spacing: -0.02em;
     }
+    /* Quick-jump bar: slides in under the header once the Buy button scrolls past */
+    .jumpbar { position: fixed; left: 0; right: 0; top: 0; z-index: 99; background: rgba(92,42,16,.96); box-shadow: 0 12px 24px -20px rgba(18,12,8,.7); transform: translateY(-110%); opacity: 0; pointer-events: none; transition: transform .45s cubic-bezier(.34,1.56,.64,1), opacity .3s ease; }
+    .jumpbar.is-visible { transform: none; opacity: 1; pointer-events: auto; }
+    .jumpbar-in { display: flex; justify-content: center; align-items: center; gap: clamp(.9rem, 2.6vw, 2.2rem); padding: .6rem 4vw; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+    .jumpbar-in::-webkit-scrollbar { display: none; }
+    .jumpbar a { color: #FAF5EE; font-family: var(--font-body); font-size: .78rem; font-weight: 500; letter-spacing: .03em; text-decoration: none; padding: .3rem .1rem; opacity: .9; border-bottom: 1px solid transparent; }
+    .jumpbar a:hover { opacity: 1; border-bottom-color: rgba(250,245,238,.6); }
+    .jumpbar a:focus-visible { outline: 2px solid #E8621A; outline-offset: 3px; border-radius: 2px; }
+    .jumpbar a:active { transform: scale(.96); }
+    /* Land each jump target just below the header and quick-jump bar */
+    #feature-scroll, #handmade, #rv-section, #faqs { scroll-margin-top: 130px; }
   </style>
 </head>
 <body>
@@ -2941,6 +2952,14 @@
       <a href="/free-guide" class="nav-link">Free Guide</a>
     </nav>
   </header>
+  <nav class="jumpbar" id="jumpbar" aria-label="Jump to section" aria-hidden="true" inert>
+    <div class="jumpbar-in">
+      <a href="#feature-scroll">How it's different</a>
+      <a href="#handmade">How it's made</a>
+      <a href="#rv-section">Reviews</a>
+      <a href="#faqs">FAQ</a>
+    </div>
+  </nav>
 
 
   <!-- ══════════════════════════════════════════ -->
@@ -3617,6 +3636,9 @@
         "Level 2": "ระดับ 2",
         "Buy": "ซื้อ",
         "Order within": "สั่งภายใน",
+        "How it's different": "ทำไมถึงต่างออกไป",
+        "How it's made": "ทำขึ้นมาอย่างไร",
+        "Reviews": "รีวิว",
         "BLACK FRIDAY SPECIAL": "โปรพิเศษ BLACK FRIDAY",
         "Ships": "จัดส่ง",
         "Delivers": "ถึงภายใน",
@@ -4320,6 +4342,27 @@
         var u = link.href;
         setTimeout(function () { location.href = u; }, 400);
       });
+      sync();
+    })();
+  </script>
+  <script>
+    (function () {
+      var bar = document.getElementById('jumpbar');
+      var buy = document.querySelector('.mystery-buy');
+      var nav = document.getElementById('navbar');
+      if (!bar || !buy) return;
+      var shown = null;
+      function sync() {
+        var want = buy.getBoundingClientRect().bottom < 0; // Buy has scrolled past the top
+        if (want) bar.style.top = Math.round(nav ? nav.getBoundingClientRect().bottom : 0) + 'px';
+        if (want === shown) return;
+        shown = want;
+        bar.classList.toggle('is-visible', want);
+        bar.inert = !want;
+        bar.setAttribute('aria-hidden', String(!want));
+      }
+      window.addEventListener('scroll', sync, { passive: true });
+      window.addEventListener('resize', sync);
       sync();
     })();
   </script>
