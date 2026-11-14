@@ -2921,6 +2921,11 @@
     .jumpbar a:hover { opacity: 1; border-bottom-color: rgba(250,245,238,.6); }
     .jumpbar a:focus-visible { outline: 2px solid #E8621A; outline-offset: 3px; border-radius: 2px; }
     .jumpbar a:active { transform: scale(.96); }
+    /* Header logo image (Agni Boards lockup) in place of the text word */
+    #navbar .logo img { display: block; height: 72px; width: auto; }
+    .is-scrolled #navbar .logo img { height: 64px; }
+    .is-scrolled #navbar { padding-bottom: .5rem !important; }
+    @media (min-width: 769px) { .is-scrolled #navbar .logo img { height: 80px; } }
     /* Land each jump target just below the header and quick-jump bar */
     #feature-scroll, #handmade, #rv-section, #faqs { scroll-margin-top: 130px; }
   </style>
@@ -2947,7 +2952,7 @@
     <span class="lang-label lang-th">TH</span>
   </button>
   <header id="navbar">
-    <a href="/" class="logo">agni</a>
+    <a href="/" class="logo"><img src="logo-header.png" alt="Agni Boards" width="280" height="288"></a>
     <nav class="nav-links">
       <a href="/free-guide" class="nav-link">Free Guide</a>
     </nav>
