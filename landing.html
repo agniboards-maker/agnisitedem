@@ -4496,7 +4496,7 @@
   <script>
     // Tapping a customer video swaps the poster for the playing video
     document.addEventListener('click', function (e) {
-      // First tap: swap the poster for the video and play it with sound (inside the tap, so phones allow sound)
+      // First tap: swap the poster for the video and play it (silent)
       var btn = e.target.closest('.rv-video');
       if (btn) {
         var v = document.createElement('video');
@@ -4505,8 +4505,7 @@
         v.poster = 'review-photos/review-video-poster.jpg';
         v.playsInline = true;
         v.preload = 'auto';
-        v.muted = false;
-        v.volume = 1;
+        v.muted = true; // this review video is silent by design
         btn.replaceWith(v);
         v.play().catch(function () {});
         return;
