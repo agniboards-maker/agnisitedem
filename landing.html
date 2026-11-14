@@ -2921,6 +2921,17 @@
     .jumpbar a:hover { opacity: 1; border-bottom-color: rgba(250,245,238,.6); }
     .jumpbar a:focus-visible { outline: 2px solid #E8621A; outline-offset: 3px; border-radius: 2px; }
     .jumpbar a:active { transform: scale(.96); }
+    /* Review photos open full size on tap */
+    .rv-photos img { cursor: zoom-in; }
+    .rv-photos img:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .rv-photos img:active { transform: scale(.97); }
+    .rv-lb { position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center; padding: 4vw; background: rgba(18,12,8,.88); opacity: 0; pointer-events: none; transition: opacity .25s ease; }
+    .rv-lb.is-open { opacity: 1; pointer-events: auto; }
+    .rv-lb img { max-width: 92vw; max-height: 86vh; width: auto; height: auto; object-fit: contain; border-radius: 10px; box-shadow: 0 24px 48px -20px rgba(0,0,0,.6); }
+    .rv-lb-close { position: absolute; top: 12px; right: 12px; width: 44px; height: 44px; border: 0; border-radius: 9999px; background: #FAF5EE; color: #5C2A10; font-size: 1.1rem; cursor: pointer; }
+    .rv-lb-close:hover { background: #fff; }
+    .rv-lb-close:focus-visible { outline: 2px solid #E8621A; outline-offset: 3px; }
+    .rv-lb-close:active { transform: scale(.95); }
     /* Customer video: poster with a play button, starts when tapped */
     .rv-video { position: relative; width: 96px; height: 96px; padding: 0; border: 1px solid rgba(92,42,16,.12); border-radius: 10px; overflow: hidden; cursor: pointer; background: none; display: block; }
     .rv-video img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -3215,14 +3226,14 @@
         <div class="rv-by"><span class="rv-name">Cat owner, review later</span><span class="rv-verified">Verified Customer</span></div>
         <div class="rv-stars" aria-label="5 out of 5 stars">★★★★★</div>
         <p class="rv-text" lang="th">ได้รับแล้วค่ะ มันดีมากๆ ขอบคุณค่ะ ไว้ว่างจะมาโพสต์รีวิว55</p>
-        <div class="rv-photos"><img src="review-photos/rv-d-1.jpg" alt="Photo from a customer review" width="96" height="96" loading="lazy"><img src="review-photos/rv-d-2.jpg" alt="Photo from a customer review" width="96" height="96" loading="lazy"></div>
+        <div class="rv-photos"><img tabindex="0" src="review-photos/rv-d-1.jpg" alt="Photo from a customer review" width="96" height="96" loading="lazy"><img tabindex="0" src="review-photos/rv-d-2.jpg" alt="Photo from a customer review" width="96" height="96" loading="lazy"></div>
         <p class="rv-loc">30 Sep 2026</p>
       </article>
       <article class="rv-item">
         <div class="rv-by"><span class="rv-name">Skeptic who can’t stop</span><span class="rv-verified">Verified Customer</span></div>
         <div class="rv-stars" aria-label="5 out of 5 stars">★★★★★</div>
         <p class="rv-text">At first I was honestly a bit skeptical, and when I stepped on it the first time it was intense. I wasn’t sure if I’d actually use it. But now I’ve been using it every day. I can’t stop.</p>
-        <div class="rv-photos"><img src="review-photos/rv-a-1.jpg" alt="Photo from a customer review" width="96" height="96" loading="lazy"></div>
+        <div class="rv-photos"><img tabindex="0" src="review-photos/rv-a-1.jpg" alt="Photo from a customer review" width="96" height="96" loading="lazy"></div>
         <p class="rv-loc">10 Nov 2026</p>
       </article>
       <article class="rv-item">
@@ -3236,14 +3247,14 @@
         <div class="rv-by"><span class="rv-name">Household recommender</span><span class="rv-verified">Verified Customer</span></div>
         <div class="rv-stars" aria-label="5 out of 5 stars">★★★★★</div>
         <p class="rv-text">Done. Perfect thank you. Wonderful idea. This board is so needed in every household.</p>
-        <div class="rv-photos"><img src="review-photos/rv-b-1.jpg" alt="Photo from a customer review" width="96" height="96" loading="lazy"></div>
+        <div class="rv-photos"><img tabindex="0" src="review-photos/rv-b-1.jpg" alt="Photo from a customer review" width="96" height="96" loading="lazy"></div>
         <p class="rv-loc">4 Nov 2026</p>
       </article>
       <article class="rv-item">
         <div class="rv-by"><span class="rv-name">Ten-second start</span><span class="rv-verified">Verified Customer</span></div>
         <div class="rv-stars" aria-label="5 out of 5 stars">★★★★★</div>
         <p class="rv-text">I could only stand like 10 seconds... do you think it is ok? OK perfect. What is the recommended time to stand on daily? Thanks a lot. It’s a very high quality product. Thank you.</p>
-        <div class="rv-photos"><img src="review-photos/rv-c-1.jpg" alt="Photo from a customer review" width="96" height="96" loading="lazy"></div>
+        <div class="rv-photos"><img tabindex="0" src="review-photos/rv-c-1.jpg" alt="Photo from a customer review" width="96" height="96" loading="lazy"></div>
         <p class="rv-loc">28 Oct 2026</p>
       </article>
       <article class="rv-item">
@@ -4400,6 +4411,43 @@
       btn.replaceWith(v);
       v.play().catch(function () {});
     });
+  </script>
+  <div class="rv-lb" id="rv-lb" aria-hidden="true" role="dialog" aria-label="Customer photo">
+    <button type="button" class="rv-lb-close" id="rv-lb-close" aria-label="Close photo">&#x2715;</button>
+    <img id="rv-lb-img" alt="">
+  </div>
+  <script>
+    (function () {
+      var lb = document.getElementById('rv-lb');
+      var lbImg = document.getElementById('rv-lb-img');
+      var closeBtn = document.getElementById('rv-lb-close');
+      var lastFocus = null;
+      function open(src, alt) {
+        lastFocus = document.activeElement;
+        lbImg.src = src;
+        lbImg.alt = alt || 'Customer photo';
+        lb.classList.add('is-open');
+        lb.setAttribute('aria-hidden', 'false');
+        closeBtn.focus();
+      }
+      function close() {
+        if (!lb.classList.contains('is-open')) return;
+        lb.classList.remove('is-open');
+        lb.setAttribute('aria-hidden', 'true');
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+      }
+      document.addEventListener('click', function (e) {
+        var img = e.target.closest && e.target.closest('.rv-photos img');
+        if (img) { open(img.currentSrc || img.src, img.alt); return; }
+      });
+      lb.addEventListener('click', function (e) { if (e.target !== lbImg) close(); });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') { close(); return; }
+        if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('.rv-photos img')) {
+          e.preventDefault(); open(e.target.currentSrc || e.target.src, e.target.alt);
+        }
+      });
+    })();
   </script>
 </body>
 </html>
