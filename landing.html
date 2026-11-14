@@ -2921,6 +2921,14 @@
     .jumpbar a:hover { opacity: 1; border-bottom-color: rgba(250,245,238,.6); }
     .jumpbar a:focus-visible { outline: 2px solid #E8621A; outline-offset: 3px; border-radius: 2px; }
     .jumpbar a:active { transform: scale(.96); }
+    /* Customer video: poster with a play button, starts when tapped */
+    .rv-video { position: relative; width: 96px; height: 96px; padding: 0; border: 1px solid rgba(92,42,16,.12); border-radius: 10px; overflow: hidden; cursor: pointer; background: none; display: block; }
+    .rv-video img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .rv-play { position: absolute; inset: 0; display: grid; place-items: center; color: #FAF5EE; font-size: 1.3rem; background: rgba(18,12,8,.22); }
+    .rv-video:hover .rv-play { background: rgba(18,12,8,.34); }
+    .rv-video:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .rv-video:active { transform: scale(.97); }
+    .rv-video-el { width: min(220px, 100%); border-radius: 10px; display: block; background: #000; }
     /* Header logo image (Agni Boards lockup) in place of the text word */
     #navbar .logo img { display: block; height: 36px; width: auto; }
     .is-scrolled #navbar .logo img { height: 32px; }
@@ -3219,6 +3227,7 @@
         <div class="rv-by"><span class="rv-name">Sensation lover</span><span class="rv-verified">Verified Customer</span></div>
         <div class="rv-stars" aria-label="5 out of 5 stars">★★★★★</div>
         <p class="rv-text">Received my boards today. I love them sooooo much. The sensation on my feet is amazing. Thank you.</p>
+        <div class="rv-photos"><button type="button" class="rv-video" aria-label="Play customer video"><img src="review-photos/review-video-poster.jpg" alt="" width="96" height="96" loading="lazy"><span class="rv-play" aria-hidden="true">&#9654;</span></button></div>
         <p class="rv-loc">6 Nov 2026</p>
       </article>
       <article class="rv-item">
@@ -4376,6 +4385,21 @@
       window.addEventListener('resize', sync);
       sync();
     })();
+  </script>
+  <script>
+    // Tapping a customer video swaps the poster for the playing video
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest('.rv-video');
+      if (!btn) return;
+      var v = document.createElement('video');
+      v.className = 'rv-video-el';
+      v.src = 'review-photos/review-video.mp4';
+      v.controls = true;
+      v.autoplay = true;
+      v.playsInline = true;
+      btn.replaceWith(v);
+      v.play().catch(function () {});
+    });
   </script>
 </body>
 </html>
