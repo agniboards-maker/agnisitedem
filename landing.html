@@ -3527,7 +3527,7 @@
       // Bangkok is UTC+7 all year (no daylight saving), so shift UTC by 7 hours.
       var TZ_OFFSET_MS = 7 * 60 * 60 * 1000;
       var CUTOFF_HOUR = 15;          // 3 p.m. Bangkok time
-      var SHIP_DAYS = [1, 2, 3, 4, 5]; // Mon-Fri (0 = Sunday)
+      var SHIP_DAYS = [0, 1, 2, 3, 4, 5, 6]; // Ships every day of the week (0 = Sunday)
       var DELIVERY_MIN_DAYS = 1;
       var DELIVERY_MAX_DAYS = 4;
 
