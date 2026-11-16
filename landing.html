@@ -2794,7 +2794,6 @@
     .hero-cta:hover { filter: brightness(1.06); box-shadow: 0 18px 30px -12px rgba(232,98,26,.75), 0 6px 12px -6px rgba(92,42,16,.34); }
     .hero-cta:focus-visible { outline: 2px solid #E8621A; outline-offset: 3px; }
     .hero-cta:active { transform: scale(.96); }
-    #buy { scroll-margin-top: 96px; }
     /* Blind box title sits below the hero headline, smaller */
     .product-copy h1 { font-size: clamp(1.3rem, 2.4vw, 1.9rem) !important; }
     /* Phone: pull the product title up so it shows on first screen */
@@ -3053,7 +3052,7 @@
     <div class="hero-intro">
       <p class="hero-headline">Want to feel fully relaxed in 1 minute?</p>
       <p class="hero-sub">No workout, no meditation. Just stand on the board and let it do the work.</p>
-      <button type="button" class="hero-cta" id="hero-cta">Get yours</button>
+      <button type="button" class="hero-cta" id="hero-cta">I do</button>
     </div>
       <div class="product-grid">
         <div class="product-visual">
@@ -3106,7 +3105,7 @@
             <button type="button" class="lg-open" id="level-guide-open" aria-haspopup="dialog" aria-controls="level-guide">Level guide</button>
           </div>
 
-          <div class="product-purchase" id="buy" aria-label="Mystery box purchase block">
+          <div class="product-purchase" aria-label="Mystery box purchase block">
             <div class="levels-wrap" role="radiogroup" aria-label="Choose intensity level">
               <button class="level-option selected" type="button" data-level="beginner" data-link="https://buy.stripe.com/8x2cN7fq1aHI4tsavTgIo01" data-price="฿3,200" data-copy="Gentle pressure to start. Best for beginners and sensitive feet." data-cta="Buy ฿3,200">
                 <span class="level-left">
@@ -3816,7 +3815,7 @@
       var T = {
         "Want to feel fully relaxed in 1 minute?": "อยากผ่อนคลายเต็มที่ใน 1 นาทีไหม?",
         "No workout, no meditation. Just stand on the board and let it do the work.": "ไม่ต้องออกกำลัง ไม่ต้องนั่งสมาธิ แค่ยืนบนบอร์ด แล้วให้มันทำงานแทนคุณ",
-        "Get yours": "สั่งเลย",
+        "I do": "ฉันพร้อม",
         "Free tote bag with purchase": "ฟรีกระเป๋าผ้าเมื่อสั่งซื้อ",
         "Free shipping across Thailand": "ฟรีค่าจัดส่งทั่วประเทศไทย",
         "Black Friday sale": "ลดราคาแบล็กฟรายเดย์",
@@ -4011,10 +4010,10 @@
 
       var heroCta = document.getElementById('hero-cta');
       if (heroCta) heroCta.addEventListener('click', function () {
-        var target = document.getElementById('buy');
+        var target = document.getElementById('mystery-buy');
         if (!target) return;
         var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+        target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
       });
 
       sw.addEventListener('click', function () {
