@@ -41,6 +41,27 @@
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Agni Boards — The Oldest Recovery Tool on Earth</title>
+  <style>html.pre-lang body { visibility: hidden; }</style>
+  <script>
+  // Language before first paint: the saved toggle choice first, otherwise the browser language (Thai if any preferred language starts with "th")
+  (function () {
+    var th = false, saved = null;
+    try { saved = localStorage.getItem('agni-lang'); } catch (e) {}
+    if (saved === 'th' || saved === 'en') {
+      th = saved === 'th';
+    } else {
+      var langs = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || ''];
+      for (var i = 0; i < langs.length; i++) { if (/^th/i.test(langs[i] || '')) { th = true; break; } }
+    }
+    window.agniThai = th;
+    document.documentElement.lang = th ? 'th' : 'en';
+    if (th) {
+      // Hide the page until the Thai text is applied (removed in the translation script, with a fallback)
+      document.documentElement.classList.add('pre-lang');
+      setTimeout(function () { document.documentElement.classList.remove('pre-lang'); }, 1500);
+    }
+  })();
+  </script>
   <meta name="description" content="Agni Boards are handmade acupressure boards crafted in Thailand. Used for deeper sleep, stress relief, and nervous system reset. 2 intensity levels. From 3,200 THB." />
   <link rel="canonical" href="https://agniboards.com/landing" />
   <meta name="robots" content="index, follow" />
@@ -2765,6 +2786,17 @@
     .free-goodies .fg-body { margin: 0; font-size: .92rem; line-height: 1.6; color: rgba(250,245,238,.85); }
     .free-goodies .fg-timer { margin: 0 0 .5rem; font-size: .85rem; line-height: 1.5; letter-spacing: .02em; font-variant-numeric: tabular-nums; color: rgba(250,245,238,.85); }
     .free-goodies .fg-timer[hidden] { display: none; }
+    /* Hero intro: headline directly under the banner, then sub-headline and Get yours button */
+    .hero-intro { text-align: center; max-width: 640px; margin: 0 auto 1.4rem; padding: 0 1rem; }
+    .hero-intro .hero-headline { margin: 0 0 .6rem; font-family: 'Source Serif 4', Georgia, serif !important; font-size: clamp(1.9rem, 6.4vw, 2.9rem); font-weight: 700; line-height: 1.12; letter-spacing: -0.03em; color: #1C0C04; text-transform: none !important; zoom: 1 !important; }
+    .hero-intro .hero-sub { margin: 0 auto 1.1rem; max-width: 30rem; font-size: 1rem; font-weight: 400; line-height: 1.6; color: rgba(28,12,4,.78); }
+    .hero-cta { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: .8rem 1.9rem; border: 0; border-radius: 9999px; background: #E8621A; color: #FAF5EE !important; font: inherit; font-weight: 600; letter-spacing: .02em; cursor: pointer; box-shadow: 0 14px 24px -12px rgba(232,98,26,.65), 0 4px 10px -6px rgba(92,42,16,.3); transition: transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .25s ease, filter .25s ease; }
+    .hero-cta:hover { filter: brightness(1.06); box-shadow: 0 18px 30px -12px rgba(232,98,26,.75), 0 6px 12px -6px rgba(92,42,16,.34); }
+    .hero-cta:focus-visible { outline: 2px solid #E8621A; outline-offset: 3px; }
+    .hero-cta:active { transform: scale(.96); }
+    #buy { scroll-margin-top: 96px; }
+    /* Blind box title sits below the hero headline, smaller */
+    .product-copy h1 { font-size: clamp(1.3rem, 2.4vw, 1.9rem) !important; }
     /* Phone: pull the product title up so it shows on first screen */
     @media (max-width: 768px) { .product-visual { margin-bottom: 0; min-height: 0; } .pdp-crumbs { margin: 0 0 .2rem; } .product-copy h1 { margin: 0 0 .6rem; } }
     /* Headings: Archivo Black, all caps, smaller, tighter (all screens) */
@@ -3018,6 +3050,11 @@
   <!-- ══════════════════════════════════════════ -->
   <section id="hero">
     <div class="product-shell">
+    <div class="hero-intro">
+      <p class="hero-headline">Want to feel fully relaxed in 1 minute?</p>
+      <p class="hero-sub">No workout, no meditation. Just stand on the board and let it do the work.</p>
+      <button type="button" class="hero-cta" id="hero-cta">Get yours</button>
+    </div>
       <div class="product-grid">
         <div class="product-visual">
           <div class="pv-main">
@@ -3069,7 +3106,7 @@
             <button type="button" class="lg-open" id="level-guide-open" aria-haspopup="dialog" aria-controls="level-guide">Level guide</button>
           </div>
 
-          <div class="product-purchase" aria-label="Mystery box purchase block">
+          <div class="product-purchase" id="buy" aria-label="Mystery box purchase block">
             <div class="levels-wrap" role="radiogroup" aria-label="Choose intensity level">
               <button class="level-option selected" type="button" data-level="beginner" data-link="https://buy.stripe.com/8x2cN7fq1aHI4tsavTgIo01" data-price="฿3,200" data-copy="Gentle pressure to start. Best for beginners and sensitive feet." data-cta="Buy ฿3,200">
                 <span class="level-left">
@@ -3777,6 +3814,9 @@
   <script>
     (function () {
       var T = {
+        "Want to feel fully relaxed in 1 minute?": "อยากผ่อนคลายเต็มที่ใน 1 นาทีไหม?",
+        "No workout, no meditation. Just stand on the board and let it do the work.": "ไม่ต้องออกกำลัง ไม่ต้องนั่งสมาธิ แค่ยืนบนบอร์ด แล้วให้มันทำงานแทนคุณ",
+        "Get yours": "สั่งเลย",
         "Free tote bag with purchase": "ฟรีกระเป๋าผ้าเมื่อสั่งซื้อ",
         "Free shipping across Thailand": "ฟรีค่าจัดส่งทั่วประเทศไทย",
         "Black Friday sale": "ลดราคาแบล็กฟรายเดย์",
@@ -3964,11 +4004,18 @@
       }
 
       var sw = document.getElementById('lang-switch');
-      var saved = null;
-      try { saved = localStorage.getItem('agni-lang'); } catch (e) {}
-      var on = saved === 'th';
+      var on = !!window.agniThai;
       sw.setAttribute('aria-checked', on ? 'true' : 'false');
       if (on) setLang(true);
+      document.documentElement.classList.remove('pre-lang');
+
+      var heroCta = document.getElementById('hero-cta');
+      if (heroCta) heroCta.addEventListener('click', function () {
+        var target = document.getElementById('buy');
+        if (!target) return;
+        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+      });
 
       sw.addEventListener('click', function () {
         on = !on;
