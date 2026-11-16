@@ -3658,10 +3658,23 @@
         var v = current();
         if (!isVideo(v)) return;
         if (!v.getAttribute('src')) v.setAttribute('src', v.getAttribute('data-src'));
-        v.play().catch(function () {});
+        var playing = v.play();
+        if (playing && playing.catch) playing.catch(function () { resumeOnTouch(); });
+      }
+      // If the browser blocks autoplay, start the video on the first tap or scroll
+      function resumeOnTouch() {
+        function go() {
+          var v = current();
+          if (isVideo(v) && v.paused) v.play().catch(function () {});
+        }
+        ['touchstart', 'pointerdown', 'scroll'].forEach(function (ev) {
+          window.addEventListener(ev, go, { once: true, passive: true });
+        });
       }
       if (document.readyState === 'complete') startVideo();
       else window.addEventListener('load', startVideo);
+      // Browsers that restore the page from cache (or a refresh) can skip load, so start it then too
+      window.addEventListener('pageshow', startVideo);
 
       // Slide the new photo in from one side while the old one leaves the other side.
       // dir = +1: new photo comes from the right (next). dir = -1: from the left (previous).
