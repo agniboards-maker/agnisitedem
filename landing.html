@@ -3051,7 +3051,7 @@
       <div class="product-grid">
         <div class="product-visual">
           <div class="pv-main">
-            <video id="pv-main-img" class="pv-video" data-src="product-video/yan.mp4" poster="product-video/yan-poster.jpg" autoplay muted loop playsinline preload="none" aria-label="Agni board product video"></video>
+            <video id="pv-main-img" class="pv-video" data-src="product-video/yan.mp4" poster="product-video/yan-poster.jpg" autoplay muted loop playsinline webkit-playsinline preload="none" aria-label="Agni board product video"></video>
             <button type="button" class="pv-sound" aria-label="Sound on or off"><span class="pv-sound-off">Turn sound on</span><span class="pv-sound-on">Mute</span></button>
             <button type="button" class="pv-arrow prev" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
             <button type="button" class="pv-arrow next" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
@@ -3657,9 +3657,22 @@
       function startVideo() {
         var v = current();
         if (!isVideo(v)) return;
+        // iOS Safari: muted must be set in script too, and a reloaded page may need an explicit load()
+        v.muted = true;
         if (!v.getAttribute('src')) v.setAttribute('src', v.getAttribute('data-src'));
+        else if (v.readyState === 0) v.load();
         var playing = v.play();
         if (playing && playing.catch) playing.catch(function () { resumeOnTouch(); });
+      }
+      // If the video is ready but still paused (Safari after a refresh), start it once it can play
+      function playWhenReady() {
+        var v = current();
+        if (isVideo(v) && v.paused) v.play().catch(function () {});
+      }
+      var firstVideo = document.getElementById('pv-main-img');
+      if (firstVideo && isVideo(firstVideo)) {
+        firstVideo.addEventListener('canplay', playWhenReady);
+        firstVideo.addEventListener('loadeddata', playWhenReady);
       }
       // If the browser blocks autoplay, start the video on the first tap or scroll
       function resumeOnTouch() {
