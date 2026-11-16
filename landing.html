@@ -3640,7 +3640,8 @@
       var sound = frame.querySelector('.pv-sound');
       function syncOverlay() {
         var v = current();
-        var on = isVideo(v);
+        // The sound button shows only on the packing video (the second slide), not on the yan video
+        var on = isVideo(v) && ((v.getAttribute('src') || v.getAttribute('data-src') || v.currentSrc || '').indexOf('623DF969') !== -1);
         var soundOn = on && !v.muted;
         frame.classList.toggle('is-video', on);
         frame.classList.toggle('is-sound', soundOn);
