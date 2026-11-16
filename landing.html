@@ -43,15 +43,16 @@
   <title>Agni Boards — The Oldest Recovery Tool on Earth</title>
   <style>html.pre-lang body { visibility: hidden; }</style>
   <script>
-  // Language before first paint: the saved toggle choice first, otherwise the browser language (Thai if any preferred language starts with "th")
+  // Language before first paint: the saved toggle choice first, otherwise the browser language (Thai only if Thai is the first preferred language)
   (function () {
     var th = false, saved = null;
     try { saved = localStorage.getItem('agni-lang'); } catch (e) {}
     if (saved === 'th' || saved === 'en') {
       th = saved === 'th';
     } else {
-      var langs = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || ''];
-      for (var i = 0; i < langs.length; i++) { if (/^th/i.test(langs[i] || '')) { th = true; break; } }
+      // Thai only when Thai is the browser's first (preferred) language
+      var first = (navigator.languages && navigator.languages.length) ? navigator.languages[0] : (navigator.language || '');
+      th = /^th/i.test(first || '');
     }
     window.agniThai = th;
     document.documentElement.lang = th ? 'th' : 'en';
