@@ -2763,6 +2763,8 @@
     .free-goodies .fg-head { margin: 0 0 .35rem; font-size: 1.05rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: .5rem; }
     .free-goodies .fg-head svg { width: 18px; height: 18px; flex: 0 0 18px; color: #E8621A; }
     .free-goodies .fg-body { margin: 0; font-size: .92rem; line-height: 1.6; color: rgba(250,245,238,.85); }
+    .free-goodies .fg-timer { margin: 0 0 .5rem; font-size: .85rem; line-height: 1.5; letter-spacing: .02em; font-variant-numeric: tabular-nums; color: rgba(250,245,238,.85); }
+    .free-goodies .fg-timer[hidden] { display: none; }
     /* Phone: pull the product title up so it shows on first screen */
     @media (max-width: 768px) { .product-visual { margin-bottom: 0; min-height: 0; } .pdp-crumbs { margin: 0 0 .2rem; } .product-copy h1 { margin: 0 0 .6rem; } }
     /* Headings: Archivo Black, all caps, smaller, tighter (all screens) */
@@ -3095,6 +3097,29 @@
             </div>
             <div class="free-goodies" aria-label="Free goodies offer">
               <p class="fg-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>BLACK FRIDAY SPECIAL</span></p>
+              <p class="fg-timer" id="bf-timer" hidden></p>
+              <script>
+              (function () {
+                var el = document.getElementById('bf-timer');
+                if (!el) return;
+                // Fixed deadline for every visitor: 30 November 2026, 23:59:59 Bangkok time (UTC+7) = 16:59:59 UTC
+                var DEADLINE = Date.UTC(2026, 10, 30, 16, 59, 59);
+                function pad(n) { return n < 10 ? '0' + n : '' + n; }
+                var timer = null;
+                function tick() {
+                  var ms = DEADLINE - Date.now();
+                  if (ms <= 0) { el.hidden = true; if (timer) clearInterval(timer); return; }
+                  var total = Math.floor(ms / 1000);
+                  var d = Math.floor(total / 86400);
+                  var clock = pad(Math.floor(total % 86400 / 3600)) + ':' + pad(Math.floor(total % 3600 / 60)) + ':' + pad(total % 60);
+                  var th = document.documentElement.lang === 'th';
+                  el.textContent = th ? 'เหลือเวลาอีก ' + d + ' วัน ' + clock : 'Ends in ' + d + 'd ' + clock;
+                  el.hidden = false;
+                }
+                tick();
+                timer = setInterval(tick, 1000);
+              })();
+              </script>
               <p class="fg-body">Free Palo Santo incense stick and carry bag for a limited time.</p>
             </div>
             <div class="delivery-box">
